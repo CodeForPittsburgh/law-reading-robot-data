@@ -1,6 +1,7 @@
-from typing import Generator, List
+import traceback
+from typing import Any, Callable, Generator, List
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
@@ -23,6 +24,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+async def catch_exceptions_middleware(request: Request, call_next: Callable[..., Any]) -> None:
+    try:
+        return await call_next(request)
+    except Exception as e:
+        print(traceback.format_exc())
+        raise e
+
+
+app.middleware('http')(catch_exceptions_middleware)
 
 # Dependency
 
@@ -47,4 +59,6 @@ def get_housebill(housebill_id: str, db: Session = Depends(get_db)) -> models.Ho
 
 @app.post("/housebill/", response_model=schemas.HouseBillGet)
 def create_housebill(housebill: schemas.HouseBillCreate, db: Session = Depends(get_db)) -> models.HouseBill:
-    return crud.create_housebill(db=db, housebill=housebill)
+    result = crud.create_housebill(db=db, housebill=housebill)
+    print(result)
+    return result

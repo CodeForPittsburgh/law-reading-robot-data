@@ -34,7 +34,7 @@ class HouseBill(Base, BaseMixin):
     links = Column(JSON)
     link = Column(Text, index=True)
     summary = Column(Text, index=True)
-    summary_detail = Column(Text, index=True)
+    summary_detail = Column(JSON)
     # I think these fields will become relationships
     parss_primesponsor = Column(Text, index=True)
     parss_cosponsors = Column(Text, index=True)

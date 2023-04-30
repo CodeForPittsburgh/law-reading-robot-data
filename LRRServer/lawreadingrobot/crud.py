@@ -1,5 +1,5 @@
 
-from typing import Any, List
+from typing import List
 
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
@@ -27,8 +27,7 @@ def get_housebills(db: Session, skip: int = 0, limit: int = 100) -> List[models.
 
 
 def create_housebill(db: Session, housebill: schemas.HouseBillCreate) -> models.HouseBill:
-    hb_dict: dict[str, str | Any] = {k: str(v) if isinstance(v, dict) else v for k, v in housebill.dict().items()}
-    db_housebill = models.HouseBill(**hb_dict)
+    db_housebill = models.HouseBill(**housebill.dict())
     db.add(db_housebill)
     db.commit()
     db.refresh(db_housebill)

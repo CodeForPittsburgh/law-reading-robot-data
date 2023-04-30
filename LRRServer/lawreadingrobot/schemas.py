@@ -1,13 +1,8 @@
+import uuid
 from datetime import datetime
-from typing import Any, List
+from typing import Dict, List
 
-import orjson
 from pydantic import BaseModel
-
-
-def orjson_dumps(v: Any, *, default: Any) -> str:
-    # orjson.dumps returns bytes, to match standard json.dumps we need to decode
-    return orjson.dumps(v, default=default).decode()
 
 
 class BaseGet(BaseModel):
@@ -19,11 +14,11 @@ class BaseGet(BaseModel):
 class HouseBillBase(BaseModel):
     hb_id: str
     title: str
-    title_detail: dict[str, str]
-    links: List[dict[str, str]]
     link: str
     summary: str
-    summary_detail: dict[str, str]
+    title_detail: Dict[str, str]
+    links: List[Dict[str, str]]
+    summary_detail: Dict[str, str]
     parss_primesponsor: str
     parss_cosponsors: str
     parss_lastaction: str
@@ -34,18 +29,17 @@ class HouseBillBase(BaseModel):
     published_parsed: str
     guidislink: str
 
-    class Config:
-        json_loads = orjson.loads
-        json_dumps = orjson_dumps
-
 
 class HouseBill(HouseBillBase):
-    id: str
+    pass
+
+    class Config:
+        orm_mode = True
 
 
 class HouseBillGet(HouseBill, BaseGet):
-    pass
+    id: uuid.UUID
 
 
-class HouseBillCreate(HouseBillBase):
+class HouseBillCreate(HouseBill):
     pass

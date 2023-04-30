@@ -8,4 +8,4 @@ db-upgrade:
 	pipenv run alembic upgrade head
 
 serve:
-	pipenv run uvicorn lawreadingrobot.main:app --reload
+	pipenv run uvicorn lawreadingrobot.main:app --reload --log-level trace --access-log
