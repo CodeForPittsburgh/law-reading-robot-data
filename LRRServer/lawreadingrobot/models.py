@@ -2,7 +2,6 @@
 import uuid
 
 from sqlalchemy import JSON, Column, DateTime, Text, Uuid
-# from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from .database import Base
@@ -21,7 +20,7 @@ def new_uuid() -> uuid.UUID:
 
 
 class HouseBill(Base, BaseMixin):
-    __tablename__: str = 'datasets'
+    __tablename__: str = 'housebill'
 
     id = Column(Uuid(as_uuid=True),
                 primary_key=True,
@@ -31,8 +30,8 @@ class HouseBill(Base, BaseMixin):
                 )
     hb_id = Column(Text, index=True)
     title = Column(Text, index=True)
-    title_detail = Column(JSON, index=True)
-    links = Column(JSON, index=True)
+    title_detail = Column(JSON)
+    links = Column(JSON)
     link = Column(Text, index=True)
     summary = Column(Text, index=True)
     summary_detail = Column(Text, index=True)

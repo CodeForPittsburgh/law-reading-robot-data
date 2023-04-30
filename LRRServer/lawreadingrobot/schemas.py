@@ -1,7 +1,13 @@
 from datetime import datetime
-from typing import List
+from typing import Any, List
 
+import orjson
 from pydantic import BaseModel
+
+
+def orjson_dumps(v: Any, *, default: Any) -> str:
+    # orjson.dumps returns bytes, to match standard json.dumps we need to decode
+    return orjson.dumps(v, default=default).decode()
 
 
 class BaseGet(BaseModel):
@@ -28,12 +34,13 @@ class HouseBillBase(BaseModel):
     published_parsed: str
     guidislink: str
 
+    class Config:
+        json_loads = orjson.loads
+        json_dumps = orjson_dumps
+
 
 class HouseBill(HouseBillBase):
     id: str
-
-    class Config:
-        orm_mode = True
 
 
 class HouseBillGet(HouseBill, BaseGet):

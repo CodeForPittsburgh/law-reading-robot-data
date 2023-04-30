@@ -10,6 +10,7 @@ sqlalchemy = "*"
 python-dotenv = "*"
 alembic = "*"
 psycopg2-binary = "*"
+orjson = "*"
 
 [dev-packages]
 
