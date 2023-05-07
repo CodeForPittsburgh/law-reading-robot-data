@@ -24,8 +24,6 @@ feeds = {
     'HouseCommitteeAssignments': 'https://www.legis.state.pa.us/WU01/LI/RSS/HouseCommitteeAssignments.xml',
     'SenateCommitteeAssignments': 'https://www.legis.state.pa.us/WU01/LI/RSS/SenateCommitteeAssignments.xml',
     'SenateExecutiveNominationsCalendar': 'https://www.legis.state.pa.us/WU01/LI/RSS/NominationsCalendar.xml',
-
-
 }
 
 for name, url in feeds.items():
@@ -41,7 +39,7 @@ for name, url in feeds.items():
     keys = list(feed.entries[0].keys())
 
     # Open a new CSV file for writing
-    with open('CSVs/' + name + '.csv', 'w', newline='') as csvfile:
+    with open('rss_data/' + name + '.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
 
         # Write the header row
