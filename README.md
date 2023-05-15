@@ -13,7 +13,7 @@ $ pipenv install
 
 Then run commands inside a virtual environemnt with the dependencies installed:
 ```
-$ pipenv run src/hello_world.py
+$ pipenv run python src/hello_world.py
 ```
 
 For more details, see: https://pipenv.pypa.io/en/latest/

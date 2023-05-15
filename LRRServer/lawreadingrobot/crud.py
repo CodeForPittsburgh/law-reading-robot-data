@@ -1,4 +1,6 @@
-
+"""
+Create, Read, Update, Delete functions for interacting with the database.
+"""
 from typing import List
 
 from fastapi import HTTPException

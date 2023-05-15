@@ -1,7 +1,5 @@
 # LRRServer
-
 - API Backend server for the Law Reading Robot
--
 
 # Getting Started
 

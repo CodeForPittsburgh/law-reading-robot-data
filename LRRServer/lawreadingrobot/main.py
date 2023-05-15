@@ -36,9 +36,8 @@ async def catch_exceptions_middleware(request: Request, call_next: Callable[...,
 
 app.middleware('http')(catch_exceptions_middleware)
 
+
 # Dependency
-
-
 def get_db() -> Generator[Session, None, None]:
     db: Session = SessionLocal()
     try:
