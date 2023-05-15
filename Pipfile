@@ -1,0 +1,19 @@
+# Pipenv configuration file, specifying project dependencies.
+#
+# Basic Usage:
+#   $ pip install                       <-- install dependencies
+#   $ pip run python <example.py>       <-- run command inside the virtual environment
+#
+# For more details, see: https://pipenv.pypa.io/en/latest/
+
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

@@ -1,0 +1,16 @@
+# Gitignore: Specifies which files should not be tracked in git.
+# For common rules, see: https://github.com/github/gitignore
+
+# =============================================================================
+# IDE Configuration
+# =============================================================================
+.idea/
+
+# =============================================================================
+# Python
+# =============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Environments
+.venv/
