@@ -1,4 +1,4 @@
-from supabase import create_client
+from push_data_example import create_client
 import json
 API_URL = 'https://kgyhcqcbqajaqyvhkdiz.supabase.co'
 API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtneWhjcWNicWFqYXF5dmhrZGl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODQ3OTk2NTksImV4cCI6MjAwMDM3NTY1OX0.ydUFo2-632RPVAgyeVYFjVmaWPNO5lYQ9NCvhK5-uy0'
