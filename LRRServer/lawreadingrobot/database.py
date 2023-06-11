@@ -1,12 +1,14 @@
+## connecting to supabase
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
+from supabase import create_client
 
-from sqlalchemy import Engine, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 
-engine: Engine = create_engine(os.environ["SQLALCHEMY_DATABASE_URI"])
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+url = os.environ.get("SUPABASE_URL")
+key = os.environ.get("SUPABASE_KEY")
+supabase = create_client(url,key)
 
-Base = declarative_base()
-metadata = Base.metadata
-Base.metadata.create_all(bind=engine)
+data = supabase.table("Bills").select("*").execute()
+print(data)
