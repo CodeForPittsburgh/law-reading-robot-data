@@ -1,0 +1,4 @@
+indent: true
+indent-spaces: 2
+indent-attributes: true
+quiet: true
