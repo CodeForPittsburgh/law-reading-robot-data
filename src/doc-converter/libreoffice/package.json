@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "jsdom": "^22.1.0",
     "mammoth": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.1",
+    "typescript": "^5.1.6"
   }
 }

@@ -1,3 +1,11 @@
+# Don't copy over the dev machines node_modules as who knows
+# what the dev may have gotten their local state into?
 node_modules/
+# Don't copy over the out directory as it needs to be a volume so the host
+# can have access to the produced text (and log) files.
 out/
+# Mardown files aren't needed for production systems
 *.md
+# Don't need TypeScript files as only JavaScript are runnable
+# and the transpilation step should happen before the Docker build step
+*.ts

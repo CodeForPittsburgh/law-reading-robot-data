@@ -2,16 +2,17 @@
 
 ## Requirements
 
-Docker
+1. Docker
+1. Make
 
 ## Run
 
-1. Build image: `docker compose build`
-1. Run command: `docker compose run convert <House Bill .doc URL> <output filename>`
+1. Build image: `make build`
+1. Run command: `URL="<House Bill .doc URL>" FILE="<output filename>" make run`
 
 Note that the output file will be placed in the `out/` directory which is
 mounted as a volume and the `<output filename>` should just be a filename and
- not a path (no directories.)
+not a path (no directories.)
 
 ## Example
 
@@ -24,8 +25,8 @@ Running
 
 ```bash
 URL='https://www.legis.state.pa.us/cfdocs/legis/PN/Public/btCheck.cfm?txtType=DOC&sessYr=2023&sessInd=0&billBody=H&billTyp=B&billNbr=612&pn=1703'
-docker compose run convert "$URL" hb_612.html
+URL="${URL}" FILE="hb_612.txt" make run
 ```
 
-Should place the converted bill in `out/hb_612.html`.  Note that the
-strikethrough is preserved as simple `<s></s>` elements.
+Should place the converted bill in `out/hb_612.txt`. Note that the
+strikethrough text is no longer present.
