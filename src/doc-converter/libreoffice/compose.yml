@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  convert:
+    build:
+      context: .
+    volumes:
+      - ./out:/code/out
