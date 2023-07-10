@@ -1,0 +1,33 @@
+{
+  "name": "worker",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "exports": {
+    "types": "./build/index.d.ts",
+    "default": "./build/index.js"
+  },
+  "scripts": {
+    "build": "npx prisma generate --schema ./dal/prisma/schema.prisma && npx tsc --declaration && cp ./text_extractor/.tidyrc ./build/text_extractor/",
+    "clean": "rm -rf build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@npmcli/promise-spawn": "^6.0.2",
+    "@prisma/client": "^4.16.2",
+    "got": "^13.0.0",
+    "jsdom": "^22.1.0",
+    "mammoth": "^1.6.0",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.1",
+    "@types/node": "^20.4.1",
+    "@types/npmcli__promise-spawn": "^6.0.0",
+    "prisma": "^4.16.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "author": "",
+  "license": "ISC"
+}

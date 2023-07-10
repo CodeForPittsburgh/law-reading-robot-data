@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  orchestrator:
+    build: .
+    depends_on:
+      - postgres_setup
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_HOSTNAME: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_PASSWORD: password
+
+  postgres_setup:
+    build:
+      context: .
+      target: db_builder
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432
+
+  postgres:
+    image: postgres:15
+    hostname: postgres
+    environment:
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
