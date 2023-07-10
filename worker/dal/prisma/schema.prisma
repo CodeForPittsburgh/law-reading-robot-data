@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum House {
+  HOUSE
+  SENATE
+}
+
+enum DocumentType {
+  BILL
+  RESOLUTION
+}
+
+model Doc {
+  house House
+  type DocumentType
+  year Int
+  session Int
+  id Int
+  @@id([house, type, year, session, id])
+  printings Printing[]
+}
+
+model Printing {
+  docHouse House
+  docType DocumentType
+  docYear Int
+  docSession Int
+  docId Int
+  doc Doc @relation(fields: [docHouse, docType, docYear, docSession, docId], references: [house, type, year, session, id])
+  id Int
+  @@id([docHouse, docType, docYear, docSession, docId, id])
+
+  title String
+  link String
+  description String
+  text String
+  summary String?
+  pubDate DateTime
+  actions Action[]
+}
+
+model Action {
+  docHouse House
+  docType DocumentType
+  docYear Int
+  docSession Int
+  docId Int
+  printingId Int
+  id String @id @default(uuid())
+  printing Printing @relation(fields: [docHouse, docType, docYear, docSession, docId, printingId], references: [docHouse, docType, docYear, docSession, docId, id])
+
+  description String
+  pubDate DateTime
+
+  @@unique([docHouse, docType, docYear, docSession, docId, printingId, description, pubDate])
+  @@index([docHouse, docType, docYear, docSession, docId, printingId, description, pubDate])
+}
