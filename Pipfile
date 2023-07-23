@@ -12,6 +12,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+supabase = "*"
 
 [dev-packages]
 
