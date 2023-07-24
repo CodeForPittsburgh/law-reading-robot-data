@@ -29,3 +29,18 @@ if __name__ == "__main__":
     raw_data = get_data_from_rss_feeds()
     processed_data = process_raw_rss_feed_data(raw_data)
     write_processed_rss_feed_data_to_csv(processed_data)
+    
+    
+def url_to_docx(url, title, dest_folder):
+    """
+    Convert a url to a docx file and write to a provided destination folder.
+    :param url: 
+    :param title: 
+    :param dest_folder: 
+    :return: None
+    """
+    url = url.replace('txtType=HTM', 'txtType=DOC')
+    dest_file = f'{dest_folder}{title}'
+    response = requests.get(url)
+    open(dest_file, "wb").write(response.content)
+    os.rename(dest_file, dest_file.replace('DOC', 'DOCX'))

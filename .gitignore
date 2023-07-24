@@ -176,3 +176,4 @@ __pycache__/
 
 # Environments
 .venv/
+.Rproj.user
