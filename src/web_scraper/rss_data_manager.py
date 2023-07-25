@@ -31,7 +31,7 @@ if __name__ == "__main__":
     write_processed_rss_feed_data_to_csv(processed_data)
     
     
-def url_to_doc(url, title, dest_folder):
+def convert_url_to_doc(url, title, dest_folder):
     """
     Convert a url to a docx file and write to a provided destination folder.
     :param url: 
