@@ -31,7 +31,7 @@ if __name__ == "__main__":
     write_processed_rss_feed_data_to_csv(processed_data)
     
     
-def url_to_docx(url, title, dest_folder):
+def url_to_doc(url, title, dest_folder):
     """
     Convert a url to a docx file and write to a provided destination folder.
     :param url: 
@@ -43,4 +43,3 @@ def url_to_docx(url, title, dest_folder):
     dest_file = f'{dest_folder}{title}'
     response = requests.get(url)
     open(dest_file, "wb").write(response.content)
-    os.rename(dest_file, dest_file.replace('DOC', 'DOCX'))
