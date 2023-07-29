@@ -13,8 +13,6 @@ name = "pypi"
 
 [packages]
 feedparser = "*"
-requests = "*"
-lxml = "*"
 
 [dev-packages]
 pytest = "*"
