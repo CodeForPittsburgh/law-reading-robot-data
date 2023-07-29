@@ -1,0 +1,21 @@
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/" xmlns:parss="https://www.legis.state.pa.us/RSS" version="2.0">
+<channel>
+<title>PA House 2023 Bills and Resolutions</title>
+<link>https://www.legis.state.pa.us/cfdocs/legis/bi/BillIndx.cfm?sYear=2023&sIndex=0&bod=H</link>
+<description>The Pennsylvania House of Representatives - A listing of bills and resolutions for the 2023 session.</description>
+<pubDate>Sat, 29 Jul 2023 05:15:00 GMT</pubDate>
+<item>
+<title>House Bill 1515 Printer's Number 1718</title>
+<link>https://www.legis.state.pa.us/cfdocs/legis/PN/Public/btCheck.cfm?txtType=HTM&sessYr=2023&sessInd=0&billBody=H&billTyp=B&billNbr=1515&pn=1718</link>
+<description>An Act amending Title 61 (Prisons and Parole) of the Pennsylvania Consolidated Statutes</description>
+<parss:primeSponsor>Representative MADDEN</parss:primeSponsor>
+<parss:coSponsors>SCHLOSSBERG, BRENNAN</parss:coSponsors>
+<parss:lastAction>Referred to JUDICIARY, July 27, 2023</parss:lastAction>
+<parss:enacted>NO</parss:enacted>
+<parss:passedHouse>YES</parss:passedHouse>
+<parss:passedSenate>NO</parss:passedSenate>
+<pubDate>Thu, 27 Jul 2023 11:47:01 GMT</pubDate>
+<guid isPermaLink="false">20230HB1515P1718</guid>
+</item>
+</channel>
+</rss>

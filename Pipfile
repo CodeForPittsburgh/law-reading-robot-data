@@ -12,8 +12,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+feedparser = "*"
+requests = "*"
+lxml = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-cov = "*"
+responses = "*"
+assertpy = "*"
 
 [requires]
 python_version = "3.11"
