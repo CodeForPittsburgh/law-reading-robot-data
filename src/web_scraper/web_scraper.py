@@ -1,6 +1,5 @@
 #this program will eventually be responsible for grabbing bill metadata and full bill text to supabase
 
-
 from docx import Document
 from supabase import create_client, Client
 from datetime import datetime
@@ -23,23 +22,23 @@ def extract_and_upload_senate_bill_metadata(): #research how to extract rss meta
         if bill is None: return
 
         title_elements = bill.title.split(' ')
-        if bill["parss_enacted"] == "YES" and title_elements[1] == "Bill": #make sure the bill was enacted and it's a bill instead of a resolution
+        #change if bill["parss_enacted"] == "YES" and title_elements[1] == "Bill": #make sure the bill was enacted and it's a bill instead of a resolution
             
-            bill_no = title_elements[2]
-            printer_no = title_elements[5]
+        bill_no = title_elements[2]
+        printer_no = title_elements[5]
 
-            bill_record = supabase.table('Revisions').select("*", count="exact").eq("bill_id", bill_no).eq("printer_no", printer_no).execute()
-            if bill_record.count == 0: #if the bill hasn't already been posted to the table, then post it
-                response = supabase.table('Revisions').upsert( #why is there no python docs for upsert?
-                    {
-                        # "created_at": metadata["created_at"],
-                        "bill_id": bill_no,
-                        "printer_no": printer_no, 
-                        "full_text_link": bill["link"], 
-                        "publication_date": bill["published"], 
-                        "legislative_body": "senate"
-                        # "active_summary_id": metadata["active_summary_id"], 
-                    }).execute()
+        bill_record = supabase.table('Revisions').select("*", count="exact").eq("bill_id", bill_no).eq("printer_no", printer_no).execute()
+        if bill_record.count == 0: #if the bill hasn't already been posted to the table, then post it
+            response = supabase.table('Revisions').upsert( #why is there no python docs for upsert?
+                {
+                    # "created_at": metadata["created_at"],
+                    "bill_id": bill_no,
+                    "printer_no": printer_no, 
+                    "full_text_link": bill["link"], 
+                    "publication_date": bill["published"], 
+                    "legislative_body": "senate"
+                    # "active_summary_id": metadata["active_summary_id"], 
+                }).execute()
     return
 
 def extract_and_upload_house_bill_metadata(): #research how to extract rss metadata and what rss is 
@@ -51,23 +50,23 @@ def extract_and_upload_house_bill_metadata(): #research how to extract rss metad
         if bill is None: return
 
         title_elements = bill.title.split(' ')
-        if bill["parss_enacted"] == "YES" and title_elements[1] == "Bill": #make sure the bill was enacted and it's a bill instead of a resolution
+        #if bill["parss_enacted"] == "YES" and title_elements[1] == "Bill": #make sure the bill was enacted and it's a bill instead of a resolution
             
-            bill_no = title_elements[2]
-            printer_no = title_elements[5]
+        bill_no = title_elements[2]
+        printer_no = title_elements[5]
 
-            bill_record = supabase.table('Revisions').select("*", count="exact").eq("bill_id", bill_no).eq("printer_no", printer_no).execute()
-            if bill_record.count == 0: #if the bill hasn't already been posted to the table, then post it
-                response = supabase.table('Revisions').upsert( #why is there no python docs for upsert?
-                    {
-                        # "created_at": metadata["created_at"],
-                        "bill_id": bill_no,
-                        "printer_no": printer_no, 
-                        "full_text_link": bill["link"], 
-                        "publication_date": bill["published"], 
-                        "legislative_body": "house"
-                        # "active_summary_id": metadata["active_summary_id"], 
-                    }).execute()
+        bill_record = supabase.table('Revisions').select("*", count="exact").eq("bill_id", bill_no).eq("printer_no", printer_no).execute()
+        if bill_record.count == 0: #if the bill hasn't already been posted to the table, then post it
+            response = supabase.table('Revisions').upsert( #why is there no python docs for upsert?
+                {
+                    # "created_at": metadata["created_at"],
+                    "bill_id": bill_no,
+                    "printer_no": printer_no, 
+                    "full_text_link": bill["link"], 
+                    "publication_date": bill["published"], 
+                    "legislative_body": "house"
+                    # "active_summary_id": metadata["active_summary_id"], 
+                }).execute()
     return
 
 #extract_law_text(path)

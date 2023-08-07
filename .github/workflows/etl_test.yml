@@ -1,0 +1,8 @@
+name: Github Actions ETL Test
+on: 
+  workflow_dispatch: 
+jobs:
+  test-etl:
+  runs-on: ubuntu-latest
+  steps:
+  
