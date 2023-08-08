@@ -1,19 +1,26 @@
+import os
 import sys
 import glob
 import subprocess
 
-def convert_doc_to_docx():
-	#try:
-	for doc in glob.iglob("*.doc"):
-		subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx', doc])
-		print(f"File converted successfully! Saved as '{docx_file}'")
+def convert_doc_to_docx(file_path):
+    try:
+        subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx', file_path])
+    except FileNotFoundError:
+        raise FileNotFoundError(f"The file '{file_path}' could not be found.")
 
-    #except Exception as e:
-    #    print(f"Error occurred: {e}")
+def covert_all_doc_to_docx(path):
+    os.chdir(path)
+    for doc in glob.iglob("*.DOC"):
+        convert_doc_to_docx(doc)
+
 
 if __name__ == "__main__":
-    #if len(sys.argv) != 2:
-     #   print("Usage: python convert_doc_to_docx.py input.doc")
-    #else:
-    #    input_file = sys.argv[1]
-        convert_doc_to_docx()
+    if len(sys.argv) != 2:
+        print("Usage: python convert_doc_to_docx.py input.doc")
+    else:
+        input_file_path = sys.argv[1]
+        if os.path.isdir(input_file_path):
+            convert_all_doc_to_docx(input_file_path)
+        elif os.path.isfile(input_file_path) and input_file_path.endswith(".DOC"):
+            convert_doc_to_docx(input_file_path)
