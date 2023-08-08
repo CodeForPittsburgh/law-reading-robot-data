@@ -3,18 +3,16 @@ on:
   workflow_dispatch: 
 jobs:
   etl-setup:
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout Repo Content
-      uses: actions/checkout@v2
-    - name: Setup Python 
-      uses: actions/setup-python@v4
-      #with: 
-        #python-version: '3.11'
-    - name: Install Python Packages
-      #how to implement this with pipfile
-    - name: Run Main RSS and DOCX Text extraction file
-      run: python src/web_scraper/web_scraper.py #maybe split main functions into separate files  
-      needs: #add dependency to setup
-
-      
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo Content
+        uses: actions/checkout@v2
+      - name: Setup Python 
+        uses: actions/setup-python@v4
+        #with: 
+          #python-version: '3.11'
+      - name: Install Python Packages
+        #how to implement this with pipfile
+      - name: Run Main RSS and DOCX Text extraction file
+        run: python src/web_scraper/web_scraper.py #maybe split main functions into separate files  
+        needs: #add dependency to setup  
