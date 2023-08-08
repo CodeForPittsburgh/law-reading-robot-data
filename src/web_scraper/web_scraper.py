@@ -49,7 +49,7 @@ def extract_and_upload_senate_bill_metadata():
                     "legislative_body": "senate"
                     # "active_summary_id": metadata["active_summary_id"], #leaving out foreign keys for now
                 }).execute()
-            print(response)
+            #print(response)
     return
 
 def extract_and_upload_house_bill_metadata():
@@ -83,6 +83,7 @@ def extract_and_upload_house_bill_metadata():
                     "legislative_body": "house"
                     # "active_summary_id": metadata["active_summary_id"], # "active_summary_id": metadata["active_summary_id"], #leaving out foreign keys for now
                 }).execute()
+            #print(response)
     return
 
 #
