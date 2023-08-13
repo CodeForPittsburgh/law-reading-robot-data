@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env: 
-  SUPABASE_API_KEY = ${{ secrets.SUPBASE_API_KEY }}
+  SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
 
 jobs:
   etl-setup:
