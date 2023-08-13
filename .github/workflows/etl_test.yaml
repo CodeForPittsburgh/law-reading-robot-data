@@ -20,7 +20,6 @@ jobs:
         run: | 
           pip install pipenv
           pipenv shell
-          pipenv install
       - name: Run Main RSS and DOCX Text extraction file
         run: python src/web_scraper/web_scraper.py #maybe split main functions into separate files  
         #needs: #add dependency to setup  
