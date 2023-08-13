@@ -12,6 +12,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+supabase-py = "*"
+python-docx = "*"
+feedparser = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
