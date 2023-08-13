@@ -31,7 +31,7 @@ def get_bill_printer_no_from_RSS_title(title):
     printer_no_regex="Printer's Number \d*"
     return re.findall(printer_no_regex, title)[0].split(' ')[-1]
 
-def check_for_existing_bill_supabase_records(supa_con, bill_no, printer_no, leg_body):
+def has_existing_supabase_records(supa_con, bill_no, printer_no, leg_body):
     existing_bill_records = supa_con.table('Revisions').select("*", count="exact").eq("bill_id", bill_no).eq("printer_no", printer_no).eq("legislative_body", leg_body).execute()
     if existing_bill_records.count > 0: return True
     else: return False
@@ -44,7 +44,7 @@ def extract_and_upload_senate_bill_metadata(supa_con):
         bill_no = get_bill_no_from_RSS_title(bill.title, "senate")
         printer_no = get_bill_printer_no_from_RSS_title(bill.title)
         
-        if check_for_existing_bill_supabase_records(supa_con, bill_no, printer_no, "senate"): continue
+        if has_existing_supabase_records(supa_con, bill_no, printer_no, "senate"): continue
         supa_con.table('Revisions').insert(
             {
                 "bill_id": bill_no,
@@ -64,7 +64,7 @@ def extract_and_upload_house_bill_metadata(supa_con):
         bill_no = get_bill_no_from_RSS_title(bill.title, "house")
         printer_no = get_bill_printer_no_from_RSS_title(bill.title)
 
-        if check_for_existing_bill_supabase_records(supa_con, bill_no, printer_no, "house"): continue
+        if has_existing_supabase_records(supa_con, bill_no, printer_no, "house"): continue
         supa_con.table('Revisions').insert(
             {
                 "bill_id": bill_no,

@@ -2,14 +2,16 @@ name: ETL_TEST
 
 on: 
   workflow_dispatch:
-# env: 
-#   SUPABASE_API_KEY = ${{ secrets.SUPBASE_API_KEY }}
+
+env: 
+  SUPABASE_API_KEY = ${{ secrets.SUPBASE_API_KEY }}
+
 jobs:
   etl-setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo Content
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Python 
         uses: actions/setup-python@v4
         with: 
