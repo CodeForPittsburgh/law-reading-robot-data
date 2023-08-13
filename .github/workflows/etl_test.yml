@@ -1,6 +1,8 @@
 name: ETL_TEST
 on: 
   workflow_dispatch: 
+env: 
+  SUPABASE_API_KEY = ${{ secrets.SUPBASE_API_KEY }}
 jobs:
   etl-setup:
     runs-on: ubuntu-latest
