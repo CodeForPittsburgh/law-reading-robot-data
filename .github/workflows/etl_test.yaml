@@ -17,9 +17,10 @@ jobs:
         with: 
           python-version: '3.11'
       - name: Install Python Packages
-        run: pip install pipenv
-      - name: Run Main RSS and DOCX Text extraction file
         run: |
-          git update-index --chmod=+x src/web_scraper/web_scraper.py
-          pipenv run src/web_scraper/web_scraper.py #maybe split main functions into separate files  
+          pip install pipenv
+          pipenv install --deploy --dev
+          pipenv run
+      - name: Run Main RSS and DOCX Text extraction file
+        run: src/web_scraper/web_scraper.py #maybe split main functions into separate files  
         #needs: #add dependency to setup  
