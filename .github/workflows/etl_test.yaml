@@ -18,10 +18,10 @@ jobs:
           python-version: '3.11'
       - name: Install Python Packages
         run: |
-          pip install python-docx
-          pip install supabase-py
-          pip install python-dotenv
-          pip install feedparser
+          python -m pip install python-docx
+          python -m pip install supabase
+          python -m pip install python-dotenv
+          python -m pip install feedparser
       - name: Run Main RSS and DOCX Text extraction file
         run: python src/web_scraper/web_scraper.py #maybe split main functions into separate files  
         #needs: #add dependency to setup  
