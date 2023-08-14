@@ -44,4 +44,4 @@ jobs:
         run:
           sudo apt install libreoffice
       - name: Run DOCX Text extraction script
-        run: python src/rss-docx.py
+        run: python src/docx-etl.py
