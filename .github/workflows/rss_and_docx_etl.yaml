@@ -1,4 +1,4 @@
-name: ETL_TEST
+name: RSS_AND_DOCX_ETL
 
 on: 
   workflow_dispatch:
@@ -16,8 +16,12 @@ jobs:
         uses: actions/setup-python@v4
         with: 
           python-version: '3.11'
-      #- name: Install Python Packages
-        #how to implement this with pipfile
-      - name: Run Main RSS and DOCX Text extraction file
+      - name: Install Python Packages
+        run: |
+          python -m pip install python-docx
+          python -m pip install supabase
+          python -m pip install python-dotenv
+          python -m pip install feedparser
+      - name: Run RSS and DOCX Text extraction script
         run: python src/web_scraper/web_scraper.py #maybe split main functions into separate files  
         #needs: #add dependency to setup  
