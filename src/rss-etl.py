@@ -1,15 +1,16 @@
 """
-Description: this program will eventually be responsible for extracting RSS senate/house bill metadata and DOCX full bill, and then uploading to supabase table
+Description: 
 """
 
-from docx import Document
+
 from supabase import create_client, Client
-from datetime import datetime
 import feedparser
 import os
 import re
-import subprocess
-import requests
+# import subprocess
+# import requests
+# from docx import Document
+# from datetime import datetime
 
 from dotenv import load_dotenv
 #load_dotenv() #for local secret management with .env file
@@ -38,38 +39,38 @@ def has_existing_supabase_records(supa_con, bill_no, printer_no, leg_body):
     if existing_bill_records.count > 0: return True
     else: return False
 
-def dowload_bill_doc_file(bill_link):
-    bill_link = bill_link.replace("txtType=HTM", "txtType=DOC") #change link to doc download
-    response = requests.get(bill_link, stream=True)
-    output_file_name = "bill.doc"
-    with open(output_file_name, "wb") as f:
-        f.write(response.content)
-    return output_file_name
+# def dowload_bill_doc_file(bill_link):
+#     bill_link = bill_link.replace("txtType=HTM", "txtType=DOC") #change link to doc download
+#     response = requests.get(bill_link, stream=True)
+#     output_file_name = "bill.doc"
+#     with open(output_file_name, "wb") as f:
+#         f.write(response.content)
+#     return output_file_name
 
-def convert_doc_to_docx(bill_path):
-    new_file_name = ""
-    try:
-        subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx', bill_path])
-        new_file_name = bill_path.replace(".doc", ".docx")
-    except FileNotFoundError:
-        raise FileNotFoundError(f"The file could not be found.")
-    return new_file_name
+# def convert_doc_to_docx(bill_path):
+#     new_file_name = ""
+#     try:
+#         subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx', bill_path])
+#         new_file_name = bill_path.replace(".doc", ".docx")
+#     except FileNotFoundError:
+#         raise FileNotFoundError(f"The file could not be found.")
+#     return new_file_name
 
-def extract_law_text_from_docx(bill_path):
-    output_text = ""
-    doc = Document(bill_path)
+# def extract_law_text_from_docx(bill_path):
+#     output_text = ""
+#     doc = Document(bill_path)
 
-    #update to only include docs that haven't been posted yet
-    # find a way to determine when the actual bill text starts
-    # do I need to validate that it's a docx file
+#     #update to only include docs that haven't been posted yet
+#     # find a way to determine when the actual bill text starts
+#     # do I need to validate that it's a docx file
 
 
-    for para in doc.paragraphs:
-        for run in para.runs: #not sure what runs are, but these for loops seem to look through on a character by character basis (testing by strikethroughing a single character and this picks it up as an individual run)
-            if not run.font.strike: #only extract text that isn't strikethrough 
-                output_text += run.text
-        output_text += ' ' #resolves spacing issues
-    return output_text
+#     for para in doc.paragraphs:
+#         for run in para.runs: #not sure what runs are, but these for loops seem to look through on a character by character basis (testing by strikethroughing a single character and this picks it up as an individual run)
+#             if not run.font.strike: #only extract text that isn't strikethrough 
+#                 output_text += run.text
+#         output_text += ' ' #resolves spacing issues
+#     return output_text
 
 
 def extract_and_upload_senate_bill_metadata(supa_con):
@@ -80,11 +81,11 @@ def extract_and_upload_senate_bill_metadata(supa_con):
         bill_no = get_bill_no_from_RSS_title(bill.title, "senate")
         printer_no = get_bill_printer_no_from_RSS_title(bill.title)
         
-        bill_path = dowload_bill_doc_file(bill["link"])
-        bill_docx_path = convert_doc_to_docx(bill_path)
-        bill_text = extract_law_text_from_docx(bill_docx_path)
-        os.remove(bill_path)
-        os.remove(bill_docx_path)
+        # bill_path = dowload_bill_doc_file(bill["link"])
+        # bill_docx_path = convert_doc_to_docx(bill_path)
+        # bill_text = extract_law_text_from_docx(bill_docx_path)
+        # os.remove(bill_path)
+        # os.remove(bill_docx_path)
 
         if has_existing_supabase_records(supa_con, bill_no, printer_no, "senate"): continue
         supa_con.table('Revisions').insert(
@@ -93,8 +94,8 @@ def extract_and_upload_senate_bill_metadata(supa_con):
                 "printer_no": printer_no, 
                 "full_text_link": bill["link"], 
                 "publication_date": bill["published"], 
-                "legislative_body": "senate",
-                "full_text": bill_text
+                "legislative_body": "senate"
+                # "full_text": bill_text
                 # "active_summary_id": metadata["active_summary_id"], #leaving out foreign keys for now
             }).execute()
     return
@@ -119,14 +120,10 @@ def extract_and_upload_house_bill_metadata(supa_con):
             }).execute()
     return
 
-
 if __name__ == "__main__":
-    # print(sb_api_key)
     supabase_connection: Client = create_client(sb_api_url, sb_api_key)
     extract_and_upload_senate_bill_metadata(supabase_connection)
-    #extract_and_upload_house_bill_metadata(supabase_connection)
-
-    # tst_doc_convert()
+    extract_and_upload_house_bill_metadata(supabase_connection)
 
 
 
