@@ -1,4 +1,4 @@
-name: ETL_TEST
+name: RSS_AND_DOCX_ETL
 
 on: 
   workflow_dispatch:
@@ -22,6 +22,6 @@ jobs:
           python -m pip install supabase
           python -m pip install python-dotenv
           python -m pip install feedparser
-      - name: Run Main RSS and DOCX Text extraction file
+      - name: Run RSS and DOCX Text extraction script
         run: python src/web_scraper/web_scraper.py #maybe split main functions into separate files  
         #needs: #add dependency to setup  
