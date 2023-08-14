@@ -21,8 +21,8 @@ senate_rss_feed = "https://www.legis.state.pa.us/WU01/LI/RSS/SenateBills.xml"
 house_rss_feed = "https://www.legis.state.pa.us/WU01/LI/RSS/HouseBills.xml"
 
 sb_api_url = "https://vsumrxhpkzegrktbtcui.supabase.co"
-#sb_api_key = os.getenv("SUPABASE_API_KEY") #local secret management wtih .env file
-sb_api_key = os.environ["SUPABASE_API_KEY"] #github actions secret management 
+sb_api_key = os.getenv("SUPABASE_API_KEY") #local secret management wtih .env file
+#sb_api_key = os.environ["SUPABASE_API_KEY"] #github actions secret management 
 
 def get_bill_no_from_RSS_title(title, leg_body):
     senate_bill_no_regex = '(Senate Bill \d*|Senate Resolution \d*)'
@@ -124,7 +124,7 @@ def process_docx_files(): #function to handle the scraping and uploading of all 
 
 
 def tst_doc_convert():
-    sample_link = "/CFDOCS/Legis/PN/Public/btCheck.cfm?txtType=DOC&sessYr=2023&sessInd=0&billBody=H&billTyp=B&billNbr=0106&pn=1743"
+    sample_link = "https://www.legis.state.pa.us//CFDOCS/Legis/PN/Public/btCheck.cfm?txtType=DOC&sessYr=2023&sessInd=0&billBody=H&billTyp=B&billNbr=0106&pn=1743"
     #download doc to runner
     response = requests.get(sample_link, stream=True)
     with open("bill.doc", "wb") as f:
@@ -138,6 +138,9 @@ def tst_doc_convert():
         raise FileNotFoundError(f"The file could not be found.")
     
     
+    if os.path.isfile('bill.docx'):
+        raise FileNotFoundError("THE FILE WAS CONVERTED SUCESSFULLY")
+
     return 
 
 
