@@ -4,10 +4,10 @@ Description:
 
 from docx import Document
 from supabase import create_client, Client
-from datetime import datetime
-import feedparser
+# from datetime import datetime
+# import feedparser
 import os
-import re
+# import re
 import subprocess
 import requests
 
