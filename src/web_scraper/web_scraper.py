@@ -9,6 +9,11 @@ import feedparser
 import os
 import re
 
+import sys
+import glob
+import subprocess
+import requests
+
 from dotenv import load_dotenv
 # load_dotenv() #for local secret management with .env file
 
@@ -118,14 +123,32 @@ def process_docx_files(): #function to handle the scraping and uploading of all 
 
 
 
+def tst_doc_convert():
+    sample_link = "/CFDOCS/Legis/PN/Public/btCheck.cfm?txtType=DOC&sessYr=2023&sessInd=0&billBody=H&billTyp=B&billNbr=0106&pn=1743"
+    #download doc to runner
+    response = requests.get(sample_link, stream=True)
+    with open("bill.doc", "wb") as f:
+        f.write(response.content)
+    
+    #
 
+    try:
+        subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx', "bill.doc"])
+    except FileNotFoundError:
+        raise FileNotFoundError(f"The file could not be found.")
+    
+    
+    return 
 
 
 
 
 if __name__ == "__main__":
     # print(sb_api_key)
-    supabase_connection: Client = create_client(sb_api_url, sb_api_key)
-    extract_and_upload_senate_bill_metadata(supabase_connection)
-    extract_and_upload_house_bill_metadata(supabase_connection)
+    #supabase_connection: Client = create_client(sb_api_url, sb_api_key)
+    #extract_and_upload_senate_bill_metadata(supabase_connection)
+    #extract_and_upload_house_bill_metadata(supabase_connection)
+
+    tst_doc_convert()
+
     #include text extraction logic later

@@ -22,6 +22,9 @@ jobs:
           python -m pip install supabase
           python -m pip install python-dotenv
           python -m pip install feedparser
+      - name: Install Libreoffice for doc to docx conversion
+        run:
+          sudo apt install libreoffice
       - name: Run RSS and DOCX Text extraction script
         run: python src/web_scraper/web_scraper.py #maybe split main functions into separate files  
         #needs: #add dependency to setup  
