@@ -100,21 +100,20 @@ how this is actually implemented will dramatically impact how my extract law tex
 """
 
 def extract_law_text(filepath):
-    # output_text = ""
-    # doc = Document(filepath)
+    output_text = ""
+    doc = Document(filepath)
 
-    # #update to only include docs that haven't been posted yet
-    #find a way to determine when the actual bill text starts
-    #do I need to validate that it's a docx file
+    #update to only include docs that haven't been posted yet
+    # find a way to determine when the actual bill text starts
+    # do I need to validate that it's a docx file
 
 
-    # for para in doc.paragraphs:
-    #     for run in para.runs: #not sure what runs are, but these for loops seem to look through on a character by character basis (testing by strikethroughing a single character and this picks it up as an individual run)
-    #         if not run.font.strike: #only extract text that isn't strikethrough 
-    #             output_text += run.text
-    #     output_text += ' ' #resolves spacing issues
-    # return output_text
-    return
+    for para in doc.paragraphs:
+        for run in para.runs: #not sure what runs are, but these for loops seem to look through on a character by character basis (testing by strikethroughing a single character and this picks it up as an individual run)
+            if not run.font.strike: #only extract text that isn't strikethrough 
+                output_text += run.text
+        output_text += ' ' #resolves spacing issues
+    return output_text
 
 def process_docx_files(): #function to handle the scraping and uploading of all docx files
     # get all bills from revsions withe empty full_text fields
@@ -138,8 +137,11 @@ def tst_doc_convert():
         raise FileNotFoundError(f"The file could not be found.")
     
     
+    tmp = extract_law_text("bill.docx")
     if os.path.isfile('bill.docx'):
-        raise FileNotFoundError("THE FILE WAS CONVERTED SUCESSFULLY")
+        raise FileNotFoundError(tmp)
+
+
 
     return 
 
