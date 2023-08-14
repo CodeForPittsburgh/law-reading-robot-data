@@ -22,6 +22,7 @@ jobs:
           python -m pip install supabase
           python -m pip install python-dotenv
           python -m pip install feedparser
+          python -m pip install requests
       - name: Install Libreoffice for doc to docx conversion
         run:
           sudo apt install libreoffice
