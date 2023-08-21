@@ -7,25 +7,25 @@ env:
   SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
 
 jobs:
-  # rss-etl:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout Repo Content
-  #       uses: actions/checkout@v3
-  #     - name: Setup Python 
-  #       uses: actions/setup-python@v4
-  #       with: 
-  #         python-version: '3.11'
-  #     - name: Install Python Packages
-  #       run: |
-  #         python -m pip install python-docx
-  #         python -m pip install supabase
-  #         python -m pip install python-dotenv
-  #         python -m pip install feedparser
-  #     - name: Run RSS extraction script
-  #       run: python src/rss-etl.py  
+  rss-etl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo Content
+        uses: actions/checkout@v3
+      - name: Setup Python 
+        uses: actions/setup-python@v4
+        with: 
+          python-version: '3.11'
+      - name: Install Python Packages
+        run: |
+          python -m pip install python-docx
+          python -m pip install supabase
+          python -m pip install python-dotenv
+          python -m pip install feedparser
+      - name: Run RSS extraction script
+        run: python src/rss-etl.py  
   docx-etl:
-    #needs: rss-etl
+    needs: rss-etl
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo Content
