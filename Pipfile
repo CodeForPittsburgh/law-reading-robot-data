@@ -16,6 +16,8 @@ supabase-py = "*"
 python-docx = "*"
 feedparser = "*"
 python-dotenv = "*"
+openai = "*"
+tiktoken = "*"
 
 [dev-packages]
 
