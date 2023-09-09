@@ -4,8 +4,8 @@ import os
 import subprocess
 import requests
 
-from dotenv import load_dotenv
-load_dotenv() #for local secret management with .env file
+#from dotenv import load_dotenv
+#load_dotenv() #for local secret management with .env file
 
 senate_rss_feed = "https://www.legis.state.pa.us/WU01/LI/RSS/SenateBills.xml"
 house_rss_feed = "https://www.legis.state.pa.us/WU01/LI/RSS/HouseBills.xml"

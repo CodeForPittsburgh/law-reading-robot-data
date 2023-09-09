@@ -3,7 +3,7 @@ import feedparser
 import os
 import re
 
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 #load_dotenv() #for local secret management with .env file
 
 senate_rss_feed = "https://www.legis.state.pa.us/WU01/LI/RSS/SenateBills.xml"
