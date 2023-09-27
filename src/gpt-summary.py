@@ -61,7 +61,7 @@ def get_gpt_summary(chunks):
         summary = get_completion(prompt)
 
 
-    return gpt_summary
+    return summary
 
 
 #helper function to use gpt prompt
