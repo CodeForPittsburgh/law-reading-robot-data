@@ -40,7 +40,7 @@ class OutputRecord:
     def __init__(self, supa_con, table_name, output_dict):
         self.supa_con = supa_con
         self.table_name = table_name
-        self.output_dict = output_dict
+        self.output_dict = output_dict.copy()
 
     def has_existing_supabase_records(self, matching_columns):
         statement = self.supa_con.table(self.table_name).select("*", count="exact")
