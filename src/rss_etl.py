@@ -14,15 +14,16 @@ The database tables updated by this script are:
     Revisions
 """
 
-#from dotenv import load_dotenv
-#load_dotenv() #for local secret management with .env file
+# from dotenv import load_dotenv
+# load_dotenv()  # for local secret management with .env file
 
 senate_rss_feed = "https://www.legis.state.pa.us/WU01/LI/RSS/SenateBills.xml"
 house_rss_feed = "https://www.legis.state.pa.us/WU01/LI/RSS/HouseBills.xml"
 
-sb_api_url = "https://vsumrxhpkzegrktbtcui.supabase.co"
-#sb_api_key = os.getenv("SUPABASE_API_KEY") #local secret management wtih .env file
-#sb_api_key = os.environ["SUPABASE_API_KEY"] #github actions secret management
+# sb_api_url = os.getenv("SUPABASE_API_URL")  # local secret management with .env file
+# sb_api_key = os.getenv("SUPABASE_API_KEY")  # local secret management with .env file
+sb_api_url = os.environ["SUPABASE_API_URL"]  # github actions secret management
+sb_api_key = os.environ["SUPABASE_API_KEY"]  # github actions secret management
 
 
 class LegislativeBody(Enum):
@@ -44,10 +45,9 @@ BILL_OUTPUT_DICT = {
     "legislative_session": "",
     "session_type": "",
     "chamber": "",
-    "title": "",
-    "description": "",
     "legislative_id": "",
 }
+
 
 class BillIdentifier:
     """
@@ -101,36 +101,40 @@ class Extractor:
         self.leg_body = leg_body
         self.rss_feed = rss_feed
 
-    def extract_metadata_from_rss_feed(self, max_attempts=3):
+    def extract_metadata_from_rss_feed(self, new_entry_count=3):
         rss_feed = feedparser.parse(self.rss_feed)
-        attempt_count = 0
         for bill in rss_feed.entries:
             if bill is None:
                 continue
 
             bill_identifier = BillIdentifier(bill["guid"])
-            self.create_and_attempt_to_insert_bill(bill, bill_identifier)
-            self.create_and_attempt_to_insert_revision(bill, bill_identifier)
-            attempt_count += 1
-            if attempt_count >= max_attempts:
+            new_bill_insertion = self.create_and_attempt_to_insert_bill(bill, bill_identifier)
+            new_revision_insertion = self.create_and_attempt_to_insert_revision(bill, bill_identifier)
+            if new_bill_insertion or new_revision_insertion:
+                new_entry_count -= 1
+            if new_entry_count == 0:
                 break
 
-    def create_and_attempt_to_insert_revision(self, bill, bill_identifier: BillIdentifier):
+    def create_and_attempt_to_insert_revision(self, bill, bill_identifier: BillIdentifier) -> bool:
         revisions_output_record = self.create_revisions_output_record(bill, bill_identifier)
         if not revisions_output_record.has_existing_supabase_records(["revision_guid"]):
             self.insert_new_record(revisions_output_record)
+            return True
+        return False
 
-
-    def create_and_attempt_to_insert_bill(self, bill, bill_identifier: BillIdentifier):
+    def create_and_attempt_to_insert_bill(self, bill, bill_identifier: BillIdentifier) -> bool:
         bills_output_record = self.create_bill_output_record(bill, bill_identifier)
         if not bills_output_record.has_existing_supabase_records(["legislative_id"]):
             self.insert_new_record(bills_output_record)
+            return True
+        return False
 
     # Method to obtain bill internal id from existing supabase row for a bill
     def get_bill_internal_id(self, bill_identifier: BillIdentifier):
-        statement = self.supa_con.table("Bills").select("bill_internal_id").eq("legislative_id", bill_identifier.bill_guid)
-        bill_internal_id = statement.execute()
-        return bill_internal_id
+        statement = self.supa_con.table("Bills").select("bill_internal_id").eq("legislative_id",
+                                                                               bill_identifier.bill_guid)
+        api_response = statement.execute()
+        return api_response.data[0]["bill_internal_id"]
 
     def create_revisions_output_record(self, bill, bill_identifier: BillIdentifier):
         revisions_output_record = OutputRecord(self.supa_con, "Revisions", REVISIONS_OUTPUT_DICT)
@@ -145,8 +149,6 @@ class Extractor:
     def create_bill_output_record(self, bill, bill_identifier: BillIdentifier):
         bills_output_record = OutputRecord(self.supa_con, "Bills", BILL_OUTPUT_DICT)
         bills_output_record.output_dict["bill_number"] = bill_identifier.bill_number
-        bills_output_record.output_dict["title"] = bill.title
-        bills_output_record.output_dict["description"] = bill.description
         bills_output_record.output_dict["legislative_id"] = bill_identifier.bill_guid
         bills_output_record.output_dict["legislative_session"] = bill_identifier.legislative_session
         bills_output_record.output_dict["session_type"] = bill_identifier.session_type
@@ -161,9 +163,11 @@ class Extractor:
     def insert_new_record(self, out_rec: OutputRecord):
         self.supa_con.table(out_rec.table_name).insert(out_rec.output_dict).execute()
 
+
 def extract_from_rss_feed(supabase_connection, leg_bod, rss_feed):
     extractor = Extractor(supabase_connection, leg_bod, rss_feed)
     extractor.extract_metadata_from_rss_feed()
+
 
 if __name__ == "__main__":
     supabase_connection: Client = create_client(sb_api_url, sb_api_key)
