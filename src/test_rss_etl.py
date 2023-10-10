@@ -18,7 +18,7 @@ class TestExtractor(TestCase):
     def test_extract_metadata_from_rss_feed(self):
         rss_extractor = Extractor(
             supa_con=self.supabase_connection,
-            leg_body="House",
+            chamber="House",
             rss_feed="https://www.legis.state.pa.us/WU01/LI/RSS/HouseBills.xml"
         )
         rss_extractor.insert_new_record = MagicMock()
