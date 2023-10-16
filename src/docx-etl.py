@@ -20,10 +20,14 @@ def download_bill_doc_file(bill_link: str) -> str:
     :return: path to the downloaded .doc file
     """
     bill_link = bill_link.replace("txtType=HTM", "txtType=DOC")  # change link to doc download
+    # TODO: Should I add more precise logging here? Will Github Actions report the timestamp of print statements?
+    print(f"Downloading bill at {bill_link}")
     response = requests.get(bill_link, stream=True)
+    print("Writing bill to file")
     output_file_name = "bill.doc"
     with open(output_file_name, "wb") as f:  # add try catch here and return empty filename if it fails
         f.write(response.content)
+    print("Finished writing bill to file")
     return output_file_name
 
 
@@ -33,8 +37,10 @@ def convert_doc_to_docx(bill_path: str) -> str:
     :param bill_path: path to the .doc file
     :return: path to the .docx file
     """
+    print("Attempting to convert file to docx...")
     try:
         subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx', bill_path])
+        print("Conversion successful.")
         return bill_path.replace(".doc", ".docx")
     except FileNotFoundError:
         raise FileNotFoundError(f"The file could not be found.")
@@ -65,7 +71,7 @@ def extract_and_upload_missing_bill_text(supa_con: Client):
     :param supa_con: Supabase connection object
     """
     # TODO: Modify so that this might also pull records which have not had a summary prior to a certain date
-    bill_records_missing_text = supa_con.table("Revisions").select("*").filter("full_text", "is", "null").execute()
+    bill_records_missing_text = supa_con.table("Revisions").select("*").filter("rt_unique_id", "is", "null").execute()
     for record in bill_records_missing_text.data:
         bill_path = download_bill_doc_file(record["full_text_link"])
         bill_docx_path = convert_doc_to_docx(bill_path)
@@ -86,7 +92,9 @@ def upload_bill_text(supa_con: Client, full_text: str, revision_guid: str):
 
     # Insert full text as entry in Revision_Text table, retrieving the rt_unique_id of the new entry
     # TODO: Check that this function returns the rt_unique_id of the new entry
-    rt_unique_id = supa_con.table('Revision_Text').insert({"full_text": full_text}).execute()
+    print("Uploading bill text to Supabase")
+    response = supa_con.table('Revision_Text').insert({"full_text": full_text}).execute()
+    rt_unique_id = response.data[0]["rt_unique_id"]
 
     # Update relevant entry in Revisions table (found with revision guid) with rt_unique_id of  new entry in Revision_Text table
     supa_con.table('Revisions').update({"rt_unique_id": rt_unique_id}).eq("revision_guid", revision_guid).execute()
