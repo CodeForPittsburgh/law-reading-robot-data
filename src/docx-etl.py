@@ -1,3 +1,5 @@
+from typing import Optional
+
 from docx import Document
 from supabase import create_client, Client
 import os
@@ -13,7 +15,14 @@ sb_api_url = os.environ["SUPABASE_API_URL"]  # github actions secret management
 sb_api_key = os.environ["SUPABASE_API_KEY"]  # github actions secret management
 
 
-def download_bill_doc_file(bill_link: str) -> str:
+def make_temp_if_not_exists():
+    """
+    Creates a temp directory if it does not already exist
+    """
+    if not os.path.exists("temp"):
+        os.mkdir("temp")
+
+def download_bill_doc_file(bill_link: str) -> Optional[str]:
     """
     Downloads a .doc file from a given link
     :param bill_link: link to the .doc file
@@ -24,11 +33,12 @@ def download_bill_doc_file(bill_link: str) -> str:
     print(f"Downloading bill at {bill_link}")
     response = requests.get(bill_link, stream=True)
     print("Writing bill to file")
-    output_file_name = "bill.doc"
-    with open(output_file_name, "wb") as f:  # add try catch here and return empty filename if it fails
+    make_temp_if_not_exists()
+    output_file_path = "temp/bill.doc"
+    with open(output_file_path, "wb") as f:
         f.write(response.content)
     print("Finished writing bill to file")
-    return output_file_name
+    return output_file_path
 
 
 def convert_doc_to_docx(bill_path: str) -> str:
@@ -39,7 +49,7 @@ def convert_doc_to_docx(bill_path: str) -> str:
     """
     print("Attempting to convert file to docx...")
     try:
-        subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx', bill_path])
+        subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx', bill_path, '--outdir', "temp"])
         print("Conversion successful.")
         return bill_path.replace(".doc", ".docx")
     except FileNotFoundError:
@@ -61,7 +71,7 @@ def extract_law_text_from_docx(bill_path: str) -> str:
         for run in paragraph.runs:  # not sure what runs are, but these for loops seem to look through on a character by character basis (testing by strikethroughing a single character and this picks it up as an individual run)
             if not run.font.strike:  # only extract text that isn't strikethrough
                 output_text += run.text
-        output_text += ' '  # resolves spacing issues
+        output_text += ' \n'  # resolves spacing issues
     return output_text
 
 
