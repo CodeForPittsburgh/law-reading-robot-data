@@ -23,7 +23,7 @@ jobs:
           python -m pip install python-dotenv
           python -m pip install feedparser
       - name: Run RSS extraction script
-        run: python src/rss-etl.py  
+        run: python src/rss_etl.py
   docx-etl:
     needs: rss-etl
     runs-on: ubuntu-latest
