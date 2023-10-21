@@ -115,7 +115,7 @@ class InsertRecord:
         self.table_name = table_name
         self.output_dict = output_dict.copy()
 
-    def has_existing_supabase_records(self, matching_columns):
+    def exists_in_supabase(self, matching_columns):
         """
         Checks if a record already exists in the Supabase table specified by the OutputRecord's table_name property.
         :param matching_columns: A list of column names to match against the OutputRecord's output_dict property
@@ -170,7 +170,7 @@ class Extractor:
         :return: True if a new record was inserted, False if not
         """
         revisions_output_record = self.create_revisions_output_record(revision_rss_feed_entry, bill_identifier)
-        if not revisions_output_record.has_existing_supabase_records(["revision_guid"]):
+        if not revisions_output_record.exists_in_supabase(["revision_guid"]):
             self.insert_new_record(revisions_output_record)
             return True
         return False
@@ -182,7 +182,7 @@ class Extractor:
         :return: True if a new record was inserted, False if not
         """
         bills_output_record = self.create_bill_output_record(bill_identifier)
-        if not bills_output_record.has_existing_supabase_records(["legislative_id"]):
+        if not bills_output_record.exists_in_supabase(["legislative_id"]):
             self.insert_new_record(bills_output_record)
             return True
         return False
