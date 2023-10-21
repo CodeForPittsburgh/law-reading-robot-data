@@ -6,6 +6,7 @@ values(
    '0',
    'HOUSE'
 )
+on conflict (legislative_id) do nothing;
 
 insert into "Revisions" (revision_guid, printer_no, full_text_link, publication_date, description, bill_internal_id)
 values(
@@ -16,3 +17,4 @@ values(
   'An Act amending the act of March 10, 1949 (P.L.30, No.14), known as the Public School Code of 1949, in terms and courses of study, further providing for Commission for Agricultural Education Excellence....',
   (SELECT bill_internal_id from "Bills" where legislative_id like '20230HB1540')
 )
+on conflict (revision_guid) do nothing;
