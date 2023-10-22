@@ -11,7 +11,7 @@ class BillIdentifierTest(unittest.TestCase):
         self.assertEqual(bill.session_type, "0")
         self.assertEqual(bill.chamber, LegislativeChamber.HOUSE.value)
         self.assertEqual(bill.bill_number, "1449")
-        self.assertEqual(bill.printer_number, "1632")
+        self.assertEqual(bill.printer_number, "1633")
 
 
 if __name__ == '__main__':
