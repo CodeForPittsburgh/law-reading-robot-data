@@ -2,9 +2,12 @@ name: Python package
 
 on: [push]
 
+env:
+  SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+  SUPABASE_API_URL: ${{ secrets.SUPABASE_API_URL }}
+
 jobs:
   test:
-
     runs-on: ubuntu-latest
 
     steps:
