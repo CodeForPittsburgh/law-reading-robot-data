@@ -24,7 +24,7 @@ jobs:
           python -m pip install python-dotenv
           python -m pip install feedparser
       - name: Run RSS extraction script
-        run: python src/rss_etl.py
+        run: python law_reader/rss_etl.py
   docx-etl:
     needs: rss-etl
     runs-on: ubuntu-latest
@@ -45,4 +45,4 @@ jobs:
         run:
           sudo apt install libreoffice
       - name: Run DOCX Text extraction script
-        run: python src/docx-etl.py
+        run: python law_reader/docx-etl.py

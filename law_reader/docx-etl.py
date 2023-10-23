@@ -6,7 +6,7 @@ import os
 import subprocess
 import requests
 
-# TODO: This code is identical to the code of my latest draft in src\rss-etl.py. Consider refactoring to avoid duplication.
+# TODO: This code is identical to the code of my latest draft in law_reader\rss-etl.py. Consider refactoring to avoid duplication.
 DEBUG = True  # Set to True to print debug messages
 if DEBUG:
     from dotenv import load_dotenv
