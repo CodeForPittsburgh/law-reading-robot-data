@@ -12,7 +12,10 @@ The database tables updated by this script are:
 - Summaries
 """
 
-
+DEBUG = True  # Set to True to print debug messages
+if DEBUG:
+    from dotenv import load_dotenv
+    load_dotenv()  # Load environment variables from .env file
 sb_api_url = os.environ["SUPABASE_API_URL"]  # github actions secret management
 sb_api_key = os.environ["SUPABASE_API_KEY"]  # github actions secret management
 
@@ -24,9 +27,9 @@ def get_revisions_without_summaries(supabase_connection: Client) -> list:
     :param supabase_connection: a Supabase connection object
     :return: a list of revisions without summaries
     """
-    api_response = supabase_connection.table("Revisions").select("*", count="exact").is_null("active_summary_id").execute()
+    api_response = supabase_connection.table("Revisions").select("*", count="exact").is_("active_summary_id", "NULL").execute()
     # TODO: Figure out how to get the result as a list
-    # return api_response.data
+    return [entry["revision_guid"] for entry in api_response.data]
 
 
 def download_bill_text(supabase_connection: Client, revision_guid: str) -> str:
@@ -36,6 +39,7 @@ def download_bill_text(supabase_connection: Client, revision_guid: str) -> str:
     :param revision_guid: the guid of the bill revision
     :return: the full text of the bill
     """
+    # TODO: Add section where you get the revision_internal_id from the Revisions table, or else have the function take in the revision_internal_id
     api_response = supabase_connection.table("Revision_Text").select("full_text").eq("revision_guid", revision_guid).execute()
     return api_response.data[0]["full_text"]
 
@@ -47,7 +51,6 @@ def summarize_bill(bill_text: str) -> str:
     :return: the summary of the bill
     """
     return bill_text
-
 
 
 def upload_summary(supabase_connection: Client, summary: str, revision_guid: str):
@@ -70,10 +73,10 @@ def summarize_all_unsummarized_revisions(supabase_connection: Client):
     :param supabase_connection: a Supabase connection object
     """
     revisions_without_summaries = get_revisions_without_summaries(supabase_connection)
-    for revision in revisions_without_summaries:
-        bill_text = download_bill_text(supabase_connection, revision["revision_guid"])
+    for revision_guid in revisions_without_summaries:
+        bill_text = download_bill_text(supabase_connection, revision_guid)
         summary = summarize_bill(bill_text)
-        upload_summary(supabase_connection, summary, revision["revision_guid"])
+        upload_summary(supabase_connection, summary, revision_guid)
 
 
 if __name__ == "__main__":
