@@ -1,7 +1,6 @@
 name: RSS_AND_DOCX_ETL
 
-on: 
-  workflow_dispatch:
+on: [push]
 
 env: 
   SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
