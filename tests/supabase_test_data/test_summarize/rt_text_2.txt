@@ -1,0 +1,66 @@
+ 
+ 
+ 
+THE GENERAL ASSEMBLY OF PENNSYLVANIA 
+ 
+SENATE BILL  
+ 
+ 
+ 
+INTRODUCED BY BROOKS, YAW, TARTAGLIONE, KANE, BREWSTER, DILLON, COSTA AND CAPPELLETTI, SEPTEMBER 28, 2023  
+ 
+ 
+SENATOR BROOKS, HEALTH AND HUMAN SERVICES, AS AMENDED, OCTOBER 3, 2023 
+ 
+ 
+ 
+ 
+AN ACT 
+ 
+ 
+Amending the act of April 9, 1929 (P.L.177, No.175), entitled "An act providing for and reorganizing the conduct of the executive and administrative work of the Commonwealth by the Executive Department thereof and the administrative departments, boards, commissions, and officers thereof, including the boards of trustees of State Normal Schools, or Teachers Colleges; abolishing, creating, reorganizing or authorizing the reorganization of certain administrative departments, boards, and commissions; defining the powers and duties of the Governor and other executive and administrative officers, and of the several administrative departments, boards, commissions, and officers; fixing the salaries of the Governor, Lieutenant Governor, and certain other executive and administrative officers; providing for the appointment of certain administrative officers, and of all deputies and other assistants and employes in certain departments, boards, and commissions; providing for judicial administration; and prescribing the manner in which the number and compensation of the deputies and all other assistants and employes of certain departments, boards and commissions shall be determined," in powers and duties of the Department of Drug and Alcohol Programs, further providing for powers and duties and providing for regulatory flexibility during opioid epidemic. 
+The General Assembly of the Commonwealth of Pennsylvania hereby enacts as follows: 
+Section 1.  Section 2301-A(7) of the act of April 9, 1929 (P.L.177, No.175), known as The Administrative Code of 1929, is amended and the section is amended by adding a paragraph to read: 
+Section 2301-A.  Powers and duties. 
+The Department of Drug and Alcohol Programs shall have the power and its duty shall be: 
+* * * 
+(7)  [To submit an annual report to the General Assembly which shall specify the actions taken and services provided and funds expended and an evaluation of their effectiveness. The annual report shall also contain the current State plan. The Department of Drug and Alcohol Programs shall submit such additional reports as may be requested by the General Assembly and recommendations to further the prevention, treatment and control of drug and alcohol abuse and dependence.] As follows: 
+(i)  To submit an annual report to the General Assembly which shall: 
+(A)  Specify the actions taken, services provided and funds expended, including an evaluation of their effectiveness. 
+(B)  Contain the current State plan. 
+(C)  Contain the most recent quarterly evaluations by the Department of Drug and Alcohol Programs of the information specified under paragraph (8.2)(i). 
+(D)  Specify the actions taken in accordance with section 2303-A. 
+(ii)  To submit additional reports as requested by the General Assembly and recommendations to further the prevention, treatment and control of drug and alcohol abuse and dependence. 
+* * * 
+(8.2)  To support the following: 
+(i)  Substance use disorder treatment providers and their workforce by evaluating, on a quarterly basis: 
+(A)  Barriers to entry into the workforce, including years of experience in the field of substance use disorder treatment, counseling, therapy or other functions beyond the qualifications specified under 28 Pa. Code Ch. 704 (relating to staffing requirements for drug and alcohol treatment activities). 
+(B)  Efforts to address the barriers specified under clause (A). 
+(ii)  Individuals in recovery seeking to work in the field of addiction treatment and recovery as provided in paragraph (1)(xiv). 
+* * * 
+Section 2.  The act is amended by adding a section to read: 
+Section 2303-A.  Regulatory flexibility during opioid epidemic. 
+(a)  Suspension.--The following regulations are suspended during an opioid epidemic, as provided under subsection (c): 
+(1)  28 Pa. Code § 704.7(b)(1) (relating to qualifications for the position of counselor) insofar as the regulation precludes an individual licensed in this Commonwealth as any of the following from serving as a counselor: 
+(i)  A certified registered nurse practitioner under the act of May 22, 1951 (P.L.317, No.69), known as The Professional Nursing Law. 
+(ii)  A physician assistant under the act of October 5, 1978 (P.L.1109, No.261), known as the Osteopathic Medical Practice Act, or the act of December 20, 1985 (P.L.457, No.112), known as the Medical Practice Act of 1985. 
+(2)  28 Pa. Code § 704.7(b)(3), (4) and (5) insofar as the regulation requires a counselor to have a certain amount of years of clinical experience in a health or human service agency, if the counselor meets the postsecondary degree requirements specified under 28 Pa. Code § 704.7(b)(3), (4) or (5). 
+(3)  28 Pa. Code § 704.8(a) (relating to qualifications for the position of counselor assistant) insofar as the regulation prohibits a counselor supervisor or counselor to supervise more than one counselor assistant. In such a case, the counselor supervisor or counselor may not supervise more than three counselor assistants. 
+(4)  28 Pa. Code § 704.12(a)(1) (relating to full-time equivalent (FTE) maximum client/staff and client/counselor ratios) insofar as the regulation prohibits: 
+(i)  One full-time equivalent primary care staff person to be available for every  10 clients during primary care hours. 
+(ii)  An individual licensed in this Commonwealth as any of the following from fulfilling the on-call physician requirement: 
+(A)  A certified registered nurse practitioner under The Professional Nursing Law. 
+(B)  A physician assistant under the Osteopathic Medical Practice Act or the Medical Practice Act of 1985. 
+(5)  28 Pa. Code § 704.12(a)(3)(i) insofar as the regulation prohibits one full-time equivalent counselor to be available for every 12 adult clients. 
+(6)  28 Pa. Code § 704.12(a)(6) insofar as the regulation prohibits one full-time equivalent counselor caseload from exceeding 50 active clients who have been in treatment for fewer than two years. Each client who has been in treatment for two years or more shall not count toward the outpatient caseload per counselor. 
+(7)  28 Pa. Code § 704.12(d) insofar as the regulation  prohibits the suspension of regulations under this subsection. 
+(8)  28 Pa. Code § 715.8(1)(vi) (relating to psychosocial staffing) insofar as the regulation prohibits one full-time equivalent counselor caseload from exceeding 50 active clients who have been in treatment for fewer than two years. Each client who has been in treatment for two years or more shall not count toward the outpatient caseload per counselor. 
+(b)  Notification.--A project director shall notify the Department of Drug and Alcohol Programs in writing or by email of the intent to utilize the regulatory flexibility under this section. 
+(c)  Applicability.-- 
+(1)  This section shall apply during the existence of an opioid epidemic. For purposes of this section, an opioid epidemic shall be deemed to exist beginning on the effective date of this section. 
+(2)  This section shall not apply when an opioid epidemic does not exist. 
+(3)  Except for the opioid epidemic deemed to exist beginning on the effective date of this section, the Secretary of Drug and Alcohol Programs shall, upon determining that an opioid epidemic does or does not exist, transmit notice to the Legislative Reference Bureau for publication in the next available issue of the Pennsylvania Bulletin. The periods of applicability of this section shall begin or end upon publication of the notice in the Pennsylvania Bulletin. 
+(d)  Definitions.--As used in this section, the following words and phrases shall have the meanings given to them in this subsection unless the context clearly indicates otherwise: 
+"Opioid epidemic."  A public health crisis in which illicit opioid use and abuse results in more than 1,000 confirmed overdose deaths from an opioid in a calendar year over at least three consecutive years in this Commonwealth, as the number of deaths are reported by the Department of Health in the Coroner and Medical Examiner Onboarding and Drug Overdose Death Monthly Surveillance Report. 
+"Project director."  The administrator of the treatment project who is responsible for the overall management of the project and staff and who meets the education and experience requirements under 28 Pa. Code Ch. 704 (relating to staffing requirements for drug and alcohol treatment activities). 
+Section 3.  This act shall take effect immediately. 

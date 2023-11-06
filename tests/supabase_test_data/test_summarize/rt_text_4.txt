@@ -1,0 +1,93 @@
+ 
+ 
+ 
+THE GENERAL ASSEMBLY OF PENNSYLVANIA 
+ 
+HOUSE BILL  
+ 
+ 
+ 
+INTRODUCED BY SIEGEL, KRUEGER, MALAGARI, PIELLI, HILL-EVANS, McNEILL, MADDEN, PROBST, SCHLOSSBERG, D. WILLIAMS, NEILSON, SHUSTERMAN, GUENST, DONAHUE, SANCHEZ, MERSKI, D. MILLER, CERRATO, CEPEDA-FREYTIZ, BOROWSKI, DELLOSO, WEBSTER, CIRESI, BRENNAN, OTTEN, KHAN AND T. DAVIS, JUNE 20, 2023  
+ 
+ 
+REFERRED TO COMMITTEE ON LABOR AND INDUSTRY, JUNE 20, 2023  
+ 
+ 
+ 
+ 
+AN ACT 
+ 
+ 
+Amending Title 62 (Procurement) of the Pennsylvania Consolidated Statutes, in source selection and contract formation,  providing for additional qualifications for public work projects; imposing duties on the Office of State Inspector General; and imposing penalties. 
+The General Assembly of the Commonwealth of Pennsylvania hereby enacts as follows: 
+Section 1.  Chapter 5 of Title 62 of the Pennsylvania Consolidated Statutes is amended by adding a subchapter to read: 
+SUBCHAPTER D.1 
+ADDITIONAL QUALIFICATIONS FOR PUBLIC WORK PROJECTS 
+Sec. 
+539.  Definitions. 
+539.1. Applicability. 
+539.2. Forms. 
+539.3. Responsibilities of purchasing agency. 
+539.4. Additional qualifications. 
+539.5. Enforcement, penalties and remedies. 
+539.6. Criminal penalty. 
+§ 539.  Definitions. 
+The following words and phrases when used in this subchapter shall have the meanings given to them in this section unless the context clearly indicates otherwise: 
+"Apprenticeship program."  As follows: 
+(1)  An apprenticeship training program that is approved by and registered with the Department of Labor and Industry under the act of July 14, 1961 (P.L.604, No.304), known as The Apprenticeship and Training Act, and that provides for on-the-job training, classroom training and the graduation of apprentice trainees to journeyperson status. 
+(2)  The term includes an apprenticeship program subject to ERISA or a non-ERISA program. 
+"ERISA."  The Employee Retirement Income Security Act of 1974 (Public Law 93-406, 29 U.S.C. § 1001 et seq.). 
+"Public work contract."  A contract for a public work project. 
+"Public work project."  A project providing for any aspect of construction, reconstruction, demolition, alteration, repair or maintenance work completed under a contract or cooperative purchasing agreement by a Commonwealth agency, which costs at least $300,000. 
+"Skilled craft laborer."  A member of a trade who: 
+(1)  is a journeyperson who has work experience equivalent to the total number of on-the-job training hours required by the applicable apprenticeship program; or 
+(2)  graduated from or is currently enrolled in an apprenticeship program. 
+§ 539.1.  Applicability. 
+Notwithstanding any provision of law and this title, this subchapter shall apply to public work projects. The requirements of this subchapter are intended to supplement the requirements under this chapter. 
+§ 539.2.  Forms. 
+(a)  Development of form.--The department shall develop a form that a contractor or subcontractor will certify compliance with all of the requirements specified under this subchapter. 
+(b)  Completion and submission.--The form under this section must be completed by a contractor and submitted to a purchasing agency with an offer or bid. 
+(c)  Subcontractor.--Forms must be completed by a subcontractor, regardless of tier, and submitted to the contractor and purchasing agency prior to commencing work on a public work project. 
+§ 539.3.  Responsibilities of purchasing agency. 
+A purchasing agency: 
+(1)  Shall only award a public work contract to a contractor that meets the requirements of this subchapter. 
+(2)  Shall review a form submitted by a contractor for compliance before awarding a public work contract. 
+(3)  May require any additional information from a contractor that it deems necessary to evaluate compliance with this subchapter. 
+(4)  Shall determine if each subcontractor on a subcontractor list provided under section 539.4(b) (relating to additional qualifications) meets the requirements of this subchapter. If the purchasing agency determines that a subcontractor does not meet the requirements of this subchapter, the purchasing agency shall inform the contractor in writing of the determination and shall: 
+(i)  Permit the contractor to substitute the subcontractor with a subcontractor that meets the requirements of this subchapter. 
+(ii)  Disqualify the contractor if the subcontractor remains in noncompliance. 
+(5)  Shall notify the contractor, in writing, whether a contractor or subcontractor meets or does not meet the requirements of this subchapter. 
+§ 539.4.  Additional qualifications. 
+(a)  Requirements for public work project.--In addition to the requirements under this subchapter, to receive an award for or commence work on a public work project, a contractor or subcontractor, regardless of tier, shall: 
+(1)  Maintain all registrations, certificates or other credentials required by Federal and State law and regulations that may be required to do business. 
+(2)  Be in compliance with bonding and general liability insurance requirements required by law or contract specifications and with the act of June 2, 1915 (P.L.736, No.338), known as the Workers' Compensation Act, and the act of December 5, 1936 (2nd Sp.Sess., 1937 P.L.2897, No.1), known as the Unemployment Compensation Law. 
+(3)  Within the previous three years, have not, after notice and appeal procedures specified in applicable law: 
+(i)  been debarred or suspended by a Federal, State or local government agency or authority; 
+(ii)  defaulted on a project; 
+(iii)  had any business, contracting or trade license, registration or certification revoked or suspended; or 
+(iv)  been found in violation of any law applicable to its business, including licensing, tax, wage and hour, environmental or safety laws. 
+(4)  Within the previous 10 years, have not been convicted of any crime relating to its business. 
+(5)  Ensure that all construction workers employed on the public work project and the prime contractor or onsite supervisor have completed the Occupational Safety and Health Administration 10-hour construction training course established by the United States Department of Labor. 
+(6)  Participate in an apprenticeship program for each specific trade or classification employed by the contractor on the project. 
+(7)  Provide a list of all crafts or classifications for all construction workers that it will employ on the public work project and the names and addresses of the applicable apprenticeship programs. 
+(8)  Have all other resources, including equipment, personnel and financial resources, to successfully perform the public work contract or subcontract and to maintain capabilities throughout the duration of the public work project or obtain these resources through the use of subcontractors or vendors. 
+(9)  Notify the purchasing agency within seven days of any material changes in its operation that impact compliance with this subsection. 
+(10)  For the previous five years, disclose any fictitious name changes or controlling interests by another company or business entity. 
+(b)  Contractors.--A contractor shall: 
+(1)  Submit a subcontractor list to the purchasing agency that provides the name and address of the subcontractors that it intends to use on the public work project and the scope of work assigned to each subcontractor. The contractor shall only use subcontractors identified on the list and may request written authorization from the purchasing agency to substitute or add subcontractors. 
+(2)  Ensure that 70% of workers employed for the construction of a public work project are skilled craft laborers. 
+§ 539.5.  Enforcement, penalties and remedies. 
+(a)  Termination and forfeiture of money.--If a purchasing agency determines that a contractor has knowingly falsified a compliance form or failed to meet additional qualifications under section 539.4 (relating to additional qualifications), the purchasing agency may terminate the public work contract, and all money due or to become due to the contractor may be forfeited as a violation of the terms and conditions of the contract. 
+(b)  Enforcement by Office of State Inspector General.--In addition to the responsibilities assigned to a purchasing agency under this subchapter, the Office of State Inspector General shall provide supplemental enforcement by: 
+(1)  Accepting, reviewing and investigating in a timely manner any credible complaint that a contractor has violated a provision of this subchapter. 
+(2)  Conducting complaint-based and random audits of contracts covered by this subchapter to ensure compliance. 
+(c)  Penalties imposed by Office of State Inspector General.--If the Office of State Inspector General finds that a contractor has knowingly falsified a compliance form or failed to meet the additional qualifications under section 539.4, the Office of State Inspector General shall: 
+(1)  Assess an administrative fine of $1,000 for a first offense and up to $25,000 for a subsequent offense, depending on the severity of the violation. 
+(2)  Notify the purchasing agency and require cancellation or termination of the public work contract at no fault to the purchasing agency. 
+(3)  Refer all identified or suspected violations of existing wage and hour, safety, procurement or other laws to the appropriate Federal or State agency for additional enforcement. 
+(d)  Cooperative agreements.--To the extent permitted by Federal and State law, the Office of State Inspector General or purchasing agencies may enter into cooperative agreements with purchasing agencies to facilitate information sharing and enforcement of the requirements of this subchapter. 
+(e)  Notice and hearing.--Enforcement actions under this section may be appealed in accordance with 2 Pa.C.S. (relating to administrative law and procedure). 
+§ 539.6.  Criminal penalty. 
+An individual or contractor who knowingly submits a form or other information to the purchasing agency under this subchapter which is false in any material manner shall be guilty of a misdemeanor in accordance with 18 Pa.C.S. § 4903 (relating to false swearing) and shall be subject to a fine not to exceed $1,000. 
+Section 2.  The addition of 62 Pa.C.S. Ch. 5 Subch. D.1 shall apply to bids or proposals made on or after the date that is one year after the effective date of this section. 
+Section 3.  This act shall take effect in 60 days. 
