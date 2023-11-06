@@ -9,7 +9,7 @@ For full Supabase-provided documentation, go [here](https://supabase.com/docs/gu
 
 ## Running the Dev Environment
 1. Start Docker
-2. After ensuring that docker is running, type `supabase start`, which uses Docker to start supabase services (this command may take a while if it’s your first time using the CLI)
+2. After ensuring that docker is running, type `supabase start` from the command line in the root directory, which uses Docker to start supabase services (this command may take a while if it’s your first time using the CLI)
 3. This will generate a series of urls and keys. For basic development roles, note the values for “API URL” and “service_role key” and record them in a .env file which you create and place in the root directory of the repository, in the following format:
 ```
 SUPABASE_API_URL=YOUR_API_URL
@@ -35,7 +35,7 @@ end $$;
 
 ## Initial Setup (Admin Only)
 
-1. Type `supabase init` to setup configuration for developing locally
+1. Type `supabase init` from the command line in the root directory to setup configuration for developing locally
 2. If not already logged in, type `supabase login` and follow the prompts
 3. Link local Supabase project to Supabase Cloud project by typing `supabase link  --project-ref vsumrxhpkzegrktbtcui`
    1. Note that is project reference ID is specific to the Supabase project. This is found in the Supabase Cloud project settings.
