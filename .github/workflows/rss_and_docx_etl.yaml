@@ -1,10 +1,11 @@
 name: RSS_AND_DOCX_ETL
 
-on: 
+on:
   workflow_dispatch:
 
 env: 
   SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+  SUPABASE_API_URL: ${{ secrets.SUPABASE_API_URL }}
 
 jobs:
   rss-etl:
@@ -16,6 +17,8 @@ jobs:
         uses: actions/setup-python@v4
         with: 
           python-version: '3.11'
+      - name: Setup Python Path
+        run: echo "PYTHONPATH=$PYTHONPATH:." >> $GITHUB_ENV
       - name: Install Python Packages
         run: |
           python -m pip install python-docx
@@ -23,7 +26,7 @@ jobs:
           python -m pip install python-dotenv
           python -m pip install feedparser
       - name: Run RSS extraction script
-        run: python src/rss-etl.py  
+        run: python law_reader/rss_etl.py
   docx-etl:
     needs: rss-etl
     runs-on: ubuntu-latest
@@ -44,4 +47,4 @@ jobs:
         run:
           sudo apt install libreoffice
       - name: Run DOCX Text extraction script
-        run: python src/docx-etl.py
+        run: python law_reader/docx-etl.py
