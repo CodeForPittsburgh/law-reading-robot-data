@@ -3,7 +3,7 @@ from supabase import create_client, Client
 import feedparser
 import os
 
-from .common import BillIdentifier, Bill, Revision, LegislativeChamber
+from law_reader.common import BillIdentifier, Bill, Revision, LegislativeChamber
 
 """
 File for extracting data from the RSS feeds of the PA Senate and House of Representatives
