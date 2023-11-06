@@ -1,8 +1,9 @@
+from dataclasses import asdict
 from supabase import create_client, Client
 import feedparser
 import os
-import re
-from enum import Enum
+
+from law_reader.common import BillIdentifier, Bill, Revision, LegislativeChamber
 
 """
 File for extracting data from the RSS feeds of the PA Senate and House of Representatives
@@ -20,84 +21,8 @@ DEBUG = True  # Set to True to print debug messages
 if DEBUG:
     from dotenv import load_dotenv
     load_dotenv()  # Load environment variables from .env file
-sb_api_url = os.environ["SUPABASE_API_URL"]  # github actions secret management
-sb_api_key = os.environ["SUPABASE_API_KEY"]  # github actions secret management
-
-
-class LegislativeChamber(Enum):
-    """
-    Enum for the legislative bodies of the Pennsylvania state legislature
-    """
-    SENATE = "Senate"
-    HOUSE = "House"
-
-
-REVISIONS_OUTPUT_DICT = {
-    "bill_internal_id": "",
-    "printer_no": "",
-    "full_text_link": "",
-    "publication_date": "",
-    "revision_guid": "",
-    "description": "",
-}
-
-BILL_OUTPUT_DICT = {
-    "bill_number": "",
-    "legislative_session": "",
-    "session_type": "",
-    "chamber": "",
-    "legislative_id": "",
-}
-
-
-class BillIdentifier:
-    """
-    Extracts unique information from a bill's guid and embeds them in discrete properties
-    """
-
-    @staticmethod
-    def determine_chamber(chamber_letter: str) -> str:
-        if chamber_letter == "H":
-            return LegislativeChamber.HOUSE.value
-        elif chamber_letter == "S":
-            return LegislativeChamber.SENATE.value
-        else:
-            raise Exception("Invalid chamber letter in guid")
-
-    def __init__(self, revision_guid: str):
-        """
-        :param revision_guid: The full guid of a bill revision, from which all other attributes are extracted.
-        Attributes:
-        -----------
-        revision_guid: The full guid of a bill revision
-        bill_guid: The guid of the bill itself, extracted from the revision guid
-        legislative_session: The year of the legislative session, in YYYY format
-        session_type: 0 for Regular Session or 1 for Special Session
-        chamber: The chamber of the legislature ('House' or 'Senate')
-        bill_number: Number assigned to the bill
-        printer_number: Printer number of the bill
-        """
-        try:
-            self.revision_guid = revision_guid
-            # This regex function extracts the bill guid from the revision guid.
-            # Effectively, it removes the printer number, which denotes a specific revision of a bill.
-            self.bill_guid = re.search(r"(\d{4}\d[HS][RB]\d+)P\d+", revision_guid).group(1)
-            # This regex function extracts multiple values from the revision guid. In order, these are:
-            #   1: The year of the legislative session, in YYYY format (\d{4})
-            #   2: 0 for Regular Session or 1 for Special Session (\d)
-            #   3: The chamber of the legislature ('House' or 'Senate') (H|S)
-            #   4: Number assigned to the bill: (\d+)
-            #   5: Printer number of the bill: (\d+)
-            #   Note additionally that [BR] indicates whether the revision is a [B]ill or a [R]esolution. This is not
-            #    used in this script, but is included in the regex for completeness.
-            re_result = re.search(r"(\d{4})(\d)(H|S)[BR](\d+)P(\d+)", revision_guid)
-            self.legislative_session = re_result.group(1)
-            self.session_type = re_result.group(2)
-            self.chamber = self.determine_chamber(re_result.group(3))
-            self.bill_number = re_result.group(4)
-            self.printer_number = re_result.group(5)
-        except AttributeError:
-            raise Exception(f"Revision guid ({revision_guid}) does not correspond to expected regex format.")
+sb_api_url = os.environ.get("SUPABASE_API_URL")  # github actions secret management
+sb_api_key = os.environ.get("SUPABASE_API_KEY")  # github actions secret management
 
 
 class InsertRecord:
@@ -114,6 +39,14 @@ class InsertRecord:
         self.supa_con = supa_con
         self.table_name = table_name
         self.output_dict = output_dict.copy()
+
+    @staticmethod
+    def insert_record_for_bill(supa_con: Client, bill: Bill) -> 'InsertRecord':
+        return InsertRecord(supa_con, 'Bills', asdict(bill))
+
+    @staticmethod
+    def insert_record_for_revision(supa_con: Client, revision: Revision) -> 'InsertRecord':
+        return InsertRecord(supa_con, 'Revisions', asdict(revision))
 
     def exists_in_supabase(self, matching_columns):
         """
@@ -206,16 +139,13 @@ class Extractor:
         :param bill_identifier: The BillIdentifier object for the bill
         :return: An OutputRecord for the bill revision
         """
-        revisions_output_record = InsertRecord(self.supa_con, "Revisions", REVISIONS_OUTPUT_DICT)
-        revisions_output_record.output_dict.update({
-            "bill_internal_id": self.get_bill_internal_id(bill_identifier),
-            "printer_no": bill_identifier.printer_number,
-            "full_text_link": revision_rss_feed_entry["link"],
-            "publication_date": revision_rss_feed_entry["published"],
-            "revision_guid": revision_rss_feed_entry["guid"],
-            "description": revision_rss_feed_entry["description"],
-        })
-        return revisions_output_record
+        revision = Revision(self.get_bill_internal_id(bill_identifier),
+                            bill_identifier.printer_number,
+                            revision_rss_feed_entry["link"],
+                            revision_rss_feed_entry["published"],
+                            revision_rss_feed_entry["guid"],
+                            revision_rss_feed_entry["description"])
+        return InsertRecord.insert_record_for_revision(self.supa_con, revision)
 
     def create_bill_output_record(self, bill_identifier: BillIdentifier) -> InsertRecord:
         """
@@ -223,15 +153,10 @@ class Extractor:
         :param bill_identifier: The BillIdentifier object for the bill
         :return: An OutputRecord for the bill
         """
-        bills_output_record = InsertRecord(self.supa_con, "Bills", BILL_OUTPUT_DICT)
-        bills_output_record.output_dict.update({
-            "bill_number": bill_identifier.bill_number,
-            "legislative_id": bill_identifier.bill_guid,
-            "legislative_session": bill_identifier.legislative_session,
-            "session_type": bill_identifier.session_type,
-            "chamber": bill_identifier.chamber,
-        })
-        return bills_output_record
+        bill = Bill(bill_identifier.bill_number, bill_identifier.bill_guid,
+                    bill_identifier.legislative_session,
+                    bill_identifier.session_type, bill_identifier.chamber)
+        return InsertRecord.insert_record_for_bill(self.supa_con, bill)
 
     def insert_new_record(self, out_rec: InsertRecord):
         """
