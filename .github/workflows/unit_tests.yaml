@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Test
-          - echo $PYTHON_PATH
+        run: echo $PYTHON_PATH
       - name: Install Python Packages
         run: |
           python -m pip install python-docx
