@@ -19,6 +19,31 @@ SUPABASE_API_KEY=YOUR_SERVICE_ROLE_KEY
 5. In the Supabase Dashboard, copy and paste the migration script `primary_migration.sql` into the SQL Editor at address http://localhost:54323/project/default/sql/new
 6. To stop the dev environment, type `supabase stop`
 
+## Delete data from SQL tables in the Supabase dev environment 
+
+This will remove all row data from all tables in the database, but will not delete the tables themselves.
+
+```postgresql
+DO
+$$
+DECLARE
+    r RECORD;
+BEGIN
+    -- Disable triggers to avoid issues with foreign keys and other constraints
+    EXECUTE 'SET session_replication_role = replica;';
+
+    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+        EXECUTE 'TRUNCATE TABLE ' || quote_ident(r.tablename) || ' CASCADE;';
+    END LOOP;
+
+    -- Enable triggers again
+    EXECUTE 'SET session_replication_role = DEFAULT;';
+END
+$$;
+
+```
+end;
+
 ## Delete SQL tables in the Supabase dev environment
 
 This is a quick and dirty way to reset the database. It will delete all tables in the database, so use with caution.
