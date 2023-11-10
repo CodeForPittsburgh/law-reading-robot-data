@@ -17,9 +17,10 @@ SUPABASE_API_KEY=YOUR_SERVICE_ROLE_KEY
 ```
 4. You can now access the Local Supabase Dashboard at http://localhost:54323/ (unless configured otherwise)
 5. In the Supabase Dashboard, copy and paste the migration script `primary_migration.sql` into the SQL Editor at address http://localhost:54323/project/default/sql/new
-6. To stop the dev environment, type `supabase stop`
+6. You are now good to run scripts on the dev environment database.
+7. To stop the dev environment, type `supabase stop`
 
-## Delete data from SQL tables in the Supabase dev environment 
+## How to delete data from SQL tables in the Supabase dev environment 
 
 This will remove all row data from all tables in the database, but will not delete the tables themselves.
 
@@ -44,7 +45,7 @@ $$;
 ```
 end;
 
-## Delete SQL tables in the Supabase dev environment
+## How to delete SQL tables in the Supabase dev environment
 
 This is a quick and dirty way to reset the database. It will delete all tables in the database, so use with caution.
 
