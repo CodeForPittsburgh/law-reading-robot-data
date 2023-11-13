@@ -90,7 +90,14 @@ class Summarization(Summarizer):
 
          ## Define a question to ask the model for summarization.
          question = "Write a summary within 200 words. "
+         
+         """ 
+         Chroma vector store similarity search allows the LLM chain to focus on the relevant
+         documents for summarization instead of passing all documents to the chain. 
+         The retrieved documents are then used by the LLM chain to generate the summary using the prompt.
+         """
          docs = vectorstore.similarity_search(question)
+         
          ## Generate a summary using the LLMChain
          result = llm_chain(docs)
 
