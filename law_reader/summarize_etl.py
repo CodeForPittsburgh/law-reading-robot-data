@@ -2,6 +2,8 @@ from supabase import create_client, Client
 import os
 
 from common.RevisionSummaryInfo import RevisionSummaryInfo
+from summarizer.SummarizationException import SummarizationException
+from summarizer.summarization import Summarization
 
 """
 File for downloading full text of bills from Supabase, summarizing them, and uploading the summaries to Supabase
@@ -25,6 +27,7 @@ sb_api_key = os.environ["SUPABASE_API_KEY"]  # github actions secret management
 def get_revisions_without_summaries(supabase_connection: Client) -> list[RevisionSummaryInfo]:
     """
     Pulls all revisions from Supabase that do not have a summary
+    A revision is considered to have a summary if its active_summary_id column in the REVISIONS table is not NULL
     :param supabase_connection: a Supabase connection object
     :return: a list of revisions without summaries
     """
@@ -39,7 +42,8 @@ def summarize_bill(bill_text: str) -> str:
     :param bill_text: the text of the bill
     :return: the summary of the bill
     """
-    return "This is a placeholder summary."
+    summarizer = Summarization()
+    return summarizer.get_summary(bill_text)
 
 
 def download_bill_text(supabase_connection: Client, rt_unique_id: int) -> str:
@@ -74,14 +78,19 @@ def upload_summary(supabase_connection: Client, revision_info: RevisionSummaryIn
 
 def summarize_all_unsummarized_revisions(supabase_connection: Client):
     """
-    Downloads the full text of all bills without summaries from Supabase, summarizes them, and uploads the summaries to Supabase
+    Downloads the full text of all bills without summaries from Supabase,
+    summarizes them, and uploads the summaries to Supabase
+    Any bills that cannot be summarized will be skipped
     :param supabase_connection: a Supabase connection object
     """
     revisions_without_summaries = get_revisions_without_summaries(supabase_connection)
     for revision_info in revisions_without_summaries:
         revision_info.full_text = download_bill_text(supabase_connection, revision_info.rt_unique_id)
-        revision_info.summary = summarize_bill(revision_info.full_text)
-        upload_summary(supabase_connection, revision_info)
+        try:
+            revision_info.summary = summarize_bill(revision_info.full_text)
+            upload_summary(supabase_connection, revision_info)
+        except SummarizationException:
+            continue
 
 
 if __name__ == "__main__":
