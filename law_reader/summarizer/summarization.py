@@ -23,7 +23,8 @@ from langchain.chains.summarize import load_summarize_chain
 from langchain.vectorstores import Chroma
 from langchain.embeddings import GPT4AllEmbeddings
 
-from summarizer import Summarizer
+from summarizer.SummarizationException import SummarizationException
+from summarizer.summarizer import Summarizer
 
 
 class Summarization(Summarizer):
@@ -104,8 +105,9 @@ class Summarization(Summarizer):
          ## Output
          return result["text"]
       except Exception as e:
-         print(f"Error occured during summarization: {e}")
-         return ""
+         msg = f"Error occured during summarization: {e}"
+         print(msg)
+         raise SummarizationException(msg)
 
 
 #full_text = "This is a long text"
