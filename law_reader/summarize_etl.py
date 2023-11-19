@@ -1,5 +1,6 @@
 from supabase import create_client, Client
 import os
+import argparse
 
 from common.RevisionSummaryInfo import RevisionSummaryInfo
 from summarizer.SummarizationException import SummarizationException
@@ -15,15 +16,6 @@ Pulls data from:
 The database tables updated by this script are:
 - Summaries
 """
-
-DEBUG = True  # Set to True to print debug messages
-if DEBUG:
-    from dotenv import load_dotenv
-    load_dotenv()  # Load environment variables from .env file
-sb_api_url = os.environ["SUPABASE_API_URL"]  # github actions secret management
-sb_api_key = os.environ["SUPABASE_API_KEY"]  # github actions secret management
-
-
 def get_revisions_without_summaries(supabase_connection: Client) -> list[RevisionSummaryInfo]:
     """
     Pulls all revisions from Supabase that do not have a summary
@@ -94,5 +86,22 @@ def summarize_all_unsummarized_revisions(supabase_connection: Client):
 
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description="Summarize bills from Database")
+
+    # Add a boolean argument for the debug flag
+    parser.add_argument('-d', '--debug', action='store_true', help='Print debug messages')
+
+    # Parse the arguments
+    args = parser.parse_args()
+
+    # if debug flag is set, pull data from .env file
+    # In production, the environment variables will be set in the github actions workflow
+    if args.debug:
+        from dotenv import load_dotenv
+        load_dotenv()  # Load environment variables from .env file
+    sb_api_url = os.environ["SUPABASE_API_URL"]  # github actions secret management
+    sb_api_key = os.environ["SUPABASE_API_KEY"]  # github actions secret management
+
     supabase_connection: Client = create_client(sb_api_url, sb_api_key)
     summarize_all_unsummarized_revisions(supabase_connection)
