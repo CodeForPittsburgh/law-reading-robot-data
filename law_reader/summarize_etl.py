@@ -56,16 +56,16 @@ def download_bill_text(supabase_connection: Client, rt_unique_id: int) -> str:
     api_response = supabase_connection.table("Revision_Text").select("full_text").eq("rt_unique_id", rt_unique_id).execute()
     return api_response.data[0]["full_text"]
 
-def upload_summary(supabase_connection: Client, revision_info: RevisionSummaryInfo):
+def upload_summary(supabase_connection: Client, revision_info: RevisionSummaryInfo, summary_text: str):
     """
     Uploads a summary to Supabase, linking it to the appropriate entry in the "Revisions" table
     :param supabase_connection: a Supabase connection object
-    :param summary: the summary of the bill
-    :param revision_guid: the guid of the bill revision
+    :param revision_info: a RevisionSummaryInfo object containing information about the revision
+    :param summary_text: the text of the summary
     """
     # Insert summary into Summaries table and retrieve the summary_id of the new entry
     api_response = supabase_connection.table("Summaries").insert(
-        {"summary_text": revision_info.summary,
+        {"summary_text": summary_text,
          "revision_internal_id": revision_info.revision_internal_id}).\
         execute()
     summary_id = api_response.data[0]["summary_id"]
@@ -85,10 +85,10 @@ def summarize_all_unsummarized_revisions(supabase_connection: Client):
     """
     revisions_without_summaries = get_revisions_without_summaries(supabase_connection)
     for revision_info in revisions_without_summaries:
-        revision_info.full_text = download_bill_text(supabase_connection, revision_info.rt_unique_id)
+        full_text = download_bill_text(supabase_connection, revision_info.rt_unique_id)
         try:
-            revision_info.summary = summarize_bill(revision_info.full_text)
-            upload_summary(supabase_connection, revision_info)
+            summary_text = summarize_bill(full_text)
+            upload_summary(supabase_connection, revision_info, summary_text)
         except SummarizationException:
             continue
 

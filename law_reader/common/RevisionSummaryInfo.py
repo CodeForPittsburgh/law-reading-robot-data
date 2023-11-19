@@ -6,8 +6,6 @@ class RevisionSummaryInfo:
         self.revision_guid = revision_guid
         self.rt_unique_id = rt_unique_id
         self.revision_internal_id = revision_internal_id
-        self.full_text = None
-        self.summary = None
 
     def __str__(self):
         return self.revision_guid
