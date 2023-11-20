@@ -3,6 +3,7 @@ import os
 import argparse
 
 from common.RevisionSummaryInfo import RevisionSummaryInfo
+from summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
 from summarizer.SummarizationException import SummarizationException
 from summarizer.summarization import Summarization
 
