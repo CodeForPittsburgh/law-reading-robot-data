@@ -35,6 +35,8 @@ def summarize_bill(bill_text: str) -> str:
     :param bill_text: the text of the bill
     :return: the summary of the bill
     """
+    # TODO: We currently don't have a means to account for if the LLM responds
+    #  with an error message. We should add that in the future.
     summarizer = Summarization()
     return summarizer.get_summary(bill_text)
 
