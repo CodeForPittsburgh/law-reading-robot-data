@@ -40,13 +40,22 @@ def summarize_bill(bill_text: str) -> str:
 
 def download_bill_text(supabase_connection: Client, rt_unique_id: int) -> str:
     """
-    Downloads the full text of a bill from Supabase
+    Downloads the full text of a bill from Supabase, using the rt_unique_id
+    Raises an InvalidRTUniqueIDException if the bill cannot be found
+     or if multiple bills are found with the given rt_unique_id
     :param supabase_connection: a Supabase connection object
     :param rt_unique_id: the unique id of the bill in the Revision_Text table
     :return: the full text of the bill
     """
     api_response = supabase_connection.table("Revision_Text").select("full_text").eq("rt_unique_id", rt_unique_id).execute()
-    return api_response.data[0]["full_text"]
+    if len(api_response.data) == 0:
+        raise InvalidRTUniqueIDException(f"Could not find bill with rt_unique_id {rt_unique_id}")
+    elif len(api_response.data) > 1:
+        raise InvalidRTUniqueIDException(f"Found multiple bills with rt_unique_id {rt_unique_id}")
+    text = api_response.data[0]["full_text"]
+    if text is None or text == "":
+        raise InvalidRTUniqueIDException(f"Bill with rt_unique_id {rt_unique_id} has no text")
+    return text
 
 def upload_summary(supabase_connection: Client, revision_info: RevisionSummaryInfo, summary_text: str):
     """
@@ -82,6 +91,8 @@ def summarize_all_unsummarized_revisions(supabase_connection: Client):
             summary_text = summarize_bill(full_text)
             upload_summary(supabase_connection, revision_info, summary_text)
         except SummarizationException:
+            continue
+        except InvalidRTUniqueIDException:
             continue
 
 
