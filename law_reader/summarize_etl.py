@@ -86,8 +86,8 @@ def summarize_all_unsummarized_revisions(supabase_connection: Client):
     """
     revisions_without_summaries = get_revisions_without_summaries(supabase_connection)
     for revision_info in revisions_without_summaries:
-        full_text = download_bill_text(supabase_connection, revision_info.rt_unique_id)
         try:
+            full_text = download_bill_text(supabase_connection, revision_info.rt_unique_id)
             summary_text = summarize_bill(full_text)
             upload_summary(supabase_connection, revision_info, summary_text)
         except SummarizationException:
