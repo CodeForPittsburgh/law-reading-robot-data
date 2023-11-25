@@ -3,12 +3,12 @@ from unittest.mock import MagicMock, patch
 
 import postgrest
 
-from common.RevisionSummaryInfo import RevisionSummaryInfo
-from summarize_etl import get_revisions_without_summaries, download_bill_text, summarize_bill, upload_summary, summarize_all_unsummarized_revisions
+from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
+from law_reader.summarize_etl import get_revisions_without_summaries, download_bill_text, summarize_bill, upload_summary, summarize_all_unsummarized_revisions
 from supabase import Client, create_client
 
-from summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
-from summarizer.SummarizationException import SummarizationException
+from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
+from law_reader.summarizer.SummarizationException import SummarizationException
 
 mock_revisions_data = [
     {"revision_guid": "guid1", "rt_unique_id": 1, "revision_internal_id": 101},
@@ -79,10 +79,10 @@ class TestSummarizeAllUnsummarizedRevisions(unittest.TestCase):
 
     def setUp(self):
         # Mock all the functions used in summarize_all_unsummarized_revisions
-        self.mock_get_revisions_without_summaries = patch('summarize_etl.get_revisions_without_summaries').start()
-        self.mock_download_bill_text = patch('summarize_etl.download_bill_text').start()
-        self.mock_summarize_bill = patch('summarize_etl.summarize_bill').start()
-        self.mock_upload = patch('summarize_etl.upload_summary').start()
+        self.mock_get_revisions_without_summaries = patch('law_reader.summarize_etl.get_revisions_without_summaries').start()
+        self.mock_download_bill_text = patch('law_reader.summarize_etl.download_bill_text').start()
+        self.mock_summarize_bill = patch('law_reader.summarize_etl.summarize_bill').start()
+        self.mock_upload = patch('law_reader.summarize_etl.upload_summary').start()
 
         # Add clean up to stop the patches after each test
         self.addCleanup(patch.stopall)
@@ -99,7 +99,7 @@ class TestSummarizeAllUnsummarizedRevisions(unittest.TestCase):
         self.addCleanup(patcher.stop)
 
         # Create a mock Client object
-        self.mock_client = Client(None, None)
+        self.mock_client = MagicMock(spec=Client)
 
     def test_with_revisions(self):
         """
@@ -222,8 +222,8 @@ class TestDownloadBillText(unittest.TestCase):
 
 class TestSummarizeBill(unittest.TestCase):
 
-    @patch('summarize_etl.Summarization.__init__', return_value=None)
-    @patch('summarize_etl.Summarization.get_summary')
+    @patch('law_reader.summarize_etl.Summarization.__init__', return_value=None)
+    @patch('law_reader.summarize_etl.Summarization.get_summary')
     def test_summarize_bill(self, mock_get_summary, mock_init):
         # Setup mock return value
         mock_get_summary.return_value = "Mock Summary"

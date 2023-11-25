@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import Mock, patch
-from summarization import Summarization
+from law_reader.summarizer.summarization import Summarization
 
 class SummarizationTest(unittest.TestCase):
 
