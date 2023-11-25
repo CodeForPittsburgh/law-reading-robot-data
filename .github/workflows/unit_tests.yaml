@@ -25,5 +25,9 @@ jobs:
           python -m pip install supabase
           python -m pip install python-dotenv
           python -m pip install feedparser
+          python -m pip install openai
+          python -m pip install gpt4all
+          python -m pip install chromadb
+          python -m pip install langchain
       - name: Run Tests
         run: python -m unittest
