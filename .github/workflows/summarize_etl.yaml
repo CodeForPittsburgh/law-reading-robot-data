@@ -1,4 +1,4 @@
-name: RSS_AND_DOCX_ETL
+name: SUMMARIZE_ETL
 
 on:
   workflow_dispatch:
