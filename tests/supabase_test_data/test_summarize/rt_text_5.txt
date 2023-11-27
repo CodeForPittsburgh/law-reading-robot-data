@@ -1,0 +1,52 @@
+ 
+ 
+ 
+THE GENERAL ASSEMBLY OF PENNSYLVANIA 
+ 
+HOUSE BILL  
+ 
+ 
+ 
+INTRODUCED BY MATZIE, PISCIOTTANO, MARSHALL, KENYATTA, MADDEN, KHAN, HANBIDGE, VENKAT, DEASY, DONAHUE, SCHLOSSBERG, KAZEEM, McNEILL, BRENNAN, BURGOS, HILL-EVANS, WARREN, GALLAGHER, FLICK, CEPEDA-FREYTIZ, SANCHEZ, CERRATO, MAYES, BENHAM, CONKLIN, BOROWSKI AND SAMUELSON, SEPTEMBER 5, 2023  
+ 
+ 
+AS REPORTED FROM COMMITTEE ON CONSUMER PROTECTION, TECHNOLOGY AND UTILITIES, HOUSE OF REPRESENTATIVES, AS AMENDED, OCTOBER 3, 2023 
+ 
+ 
+ 
+ 
+AN ACT 
+ 
+ 
+Amending the act of December 17, 1968 (P.L.1224, No.387), entitled "An act prohibiting unfair methods of competition and unfair or deceptive acts or practices in the conduct of any trade or commerce, giving the Attorney General and District Attorneys certain powers and duties and providing penalties," prohibiting speculative ticketing acts or practices. 
+The General Assembly of the Commonwealth of Pennsylvania hereby enacts as follows: 
+Section 1.  The act of December 17, 1968 (P.L.1224, No.387), known as the Unfair Trade Practices and Consumer Protection Law, is amended by adding a section to read: 
+Section 3.2.  Prohibition on Speculative Ticketing Acts or Practices.--(a)  A reseller may not advertise, offer for sale, contract for the resale of a ticket or accept full or partial consideration for resale of a ticket unless all of the following requirements are met: 
+(1)  The ticket shall conform to the ticket's description as advertised and include the precise section and row of the seat or space to which the ticket would entitle the bearer to occupy. If the ticket is not for a reserved seat, the ticket shall include descriptive information about the location of the seat or space, including a description of a section or other area within the venue where the seat or space is located. 
+(2)  The reseller shall have possession or constructive possession of the ticket, or a written contract to obtain the ticket at a certain price from the rights holder or operator for the ticket. As used in this clause, the term "constructive possession" means the ability to exercise a conscious dominion over a ticket, the power to control the ticket and the intent to exercise that control. 
+(3)  An official ticket presale or onsale for the event has occurred before the ticket being advertised, listed or offered for resale by the reseller, unless the rights holder or operator has consented in writing to the advertisement, listing or offer for resale. 
+(b)  A secondary ticket platform may not publish an advertisement for a ticket, listing for a ticket or offer for resale of a ticket unless an official ticket presale or onsale for the event has occurred before the ticket being advertised, listed or offered for resale, unless the rights holder or operator has consented in writing to the advertisement, listing or offer for resale. 
+(c)  A secondary ticket platform may not use any of the following: 
+(1)  A domain name, or a subdomain name of the domain name, in the URL of the secondary ticket platform that contains the name of a specific rights holder or operator or words likely to be associated with a specific rights holder or operator, unless authorized by the specific rights holder or operator. 
+(2)  The name of the exhibition or performance, including the name of a person, team, performance, group or entity scheduled to perform at a venue or event, unless authorized by the owner of the name. 
+(3)  A trademark not owned by the secondary ticket platform, including a trademark owned by an authorized agent or partner of the operator, unless authorized by the owner of the trademark. 
+(4)  A combination of texts, images, web designs or Internet website addresses that are substantially similar to the texts, images, web designs or Internet website addresses of a rights holder or operator, without the written consent of the rights holder or operator. 
+(5)  A name substantially similar to a name specified under clauses (1) through (4), including a misspelling of a name specified under clauses (1) through (4). 
+(d)  The Attorney General shall have the authority to enforce this section. A violation of this section shall be deemed unlawful under section 3 of this act for the purposes of enforcement by the Attorney General. 
+ (e)  An operator, venue, rights holder or primary ticket platform who suffers injury as a result of another person's violation of this section may bring a private action to recover actual damages for such injury plus one thousand dollars ($1,000) for each violation of this section regarding each ticket sold by the person. The court may, in its discretion, provide such additional relief as it deems necessary or proper. The court may award to the plaintiff, in addition to other relief provided in this section, costs and reasonable attorney fees. 
+ (f)  As used in this section: 
+"Domain name" means a globally unique, hierarchical reference to an Internet host or service, which is assigned through centralized Internet naming authorities, and which is comprised of a series of character strings separated by periods, with the right-most string specifying the top of the hierarchy. 
+"Operator" means a person or entity that owns, operates or controls a venue or that organizes or produces entertainment. 
+"Primary sale" means the initial sale of a ticket. 
+"Primary ticket platform" means a provider of ticketing services or an agent of the provider that engages in the primary sale of tickets for an event. 
+"Purchaser" means a person who purchases a ticket from a primary ticket platform or a secondary ticket platform. 
+"Resale or secondary sale" means a sale of a ticket that is not a primary sale. 
+"Reseller" means a person or entity that engages in the resale or secondary sale of tickets. 
+"Rights holder" means any of the following: 
+(1)  A person or entity, including a venue, that has the initial ownership rights to sell a ticket to an event for which tickets for entry by the public are required. 
+(2)  Regarding a specific live event, a performing artist or team or an agent working on behalf of the performing artist or team. 
+"Secondary ticket platform" means a business that operates or provides an Internet website, software application for a mobile device or other digital platform for the purpose of reselling or facilitating the resale of tickets to purchasers, including a primary ticketing platform to the extent that the platform is engaged in reselling or facilitating the resale of tickets to purchasers. 
+"Ticket" means a printed, electronic or other license issued by an operator or rights holder for admission to an event at the date and time specified on the ticket, subject to the terms and conditions as specified by the operator or rights holder. 
+"URL" means the Uniform Resource Locator for an Internet website. 
+"Venue" means a public or private facility at which the general public is admitted for a sporting event, concert, theater performance, amusement or other entertainment event. 
+Section 2.  This act shall take effect in 60 days. 

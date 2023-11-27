@@ -1,6 +1,6 @@
 import unittest
 
-from law_reader import BillIdentifier, LegislativeChamber
+from law_reader.common import BillIdentifier, LegislativeChamber
 
 
 class BillIdentifierTest(unittest.TestCase):
