@@ -21,8 +21,8 @@ from langchain.chains.summarize import load_summarize_chain
 from langchain.vectorstores import Chroma
 from langchain.embeddings import GPT4AllEmbeddings
 
-from law_reader.summarizer.SummarizationException import SummarizationException
-from law_reader.summarizer.summarizer import Summarizer
+from SummarizationException import SummarizationException
+from summarizer import Summarizer
 
 
 class Summarization(Summarizer):
