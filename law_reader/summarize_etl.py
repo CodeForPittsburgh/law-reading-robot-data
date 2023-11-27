@@ -2,10 +2,10 @@ from supabase import create_client, Client
 import os
 import argparse
 
-from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
-from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
-from law_reader.summarizer.SummarizationException import SummarizationException
-from law_reader.summarizer.summarization import Summarization
+from common.RevisionSummaryInfo import RevisionSummaryInfo
+from summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
+from summarizer.SummarizationException import SummarizationException
+from summarizer.summarization import Summarization
 
 """
 File for downloading full text of bills from Supabase, summarizing them, and uploading the summaries to Supabase
