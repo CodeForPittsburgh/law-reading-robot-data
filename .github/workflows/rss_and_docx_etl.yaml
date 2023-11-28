@@ -45,7 +45,7 @@ jobs:
           python -m pip install requests
       - name: Install Libreoffice for doc to docx conversion
         run: |
-          apt-get update
+          sudo apt-get update
           sudo apt install libreoffice
       - name: Run DOCX Text extraction script
         run: python law_reader/docx-etl.py
