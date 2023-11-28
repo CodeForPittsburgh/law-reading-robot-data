@@ -44,7 +44,7 @@ jobs:
           python -m pip install python-dotenv
           python -m pip install requests
       - name: Install Libreoffice for doc to docx conversion
-        run:
+        run: |
           apt-get update
           sudo apt install libreoffice
       - name: Run DOCX Text extraction script
