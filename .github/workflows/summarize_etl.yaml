@@ -25,6 +25,7 @@ jobs:
           python -m pip install langchain
           python -m pip install gpt4all
           python -m pip install chromadb
+          python -m pip install feedparser
           # Add other packages as needed
       - name: Run Summarize ETL script
         run: |
