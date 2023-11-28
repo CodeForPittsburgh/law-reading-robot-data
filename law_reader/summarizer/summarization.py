@@ -28,7 +28,7 @@ from .summarizer import Summarizer
 class Summarization(Summarizer):
 
     def __init__(self, llm=None):
-        api_key = os.environ.get('OPENAI_API_KEY')
+        api_key = os.environ['OPENAI_API_KEY']
 
         if not api_key:
             raise ValueError("API key is not set. Please set OPENAI_API_KEY in your environment.")
