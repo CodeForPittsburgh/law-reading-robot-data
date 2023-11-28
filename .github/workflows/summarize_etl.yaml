@@ -6,6 +6,7 @@ on:
 env:
   SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
   SUPABASE_API_URL: ${{ secrets.SUPABASE_API_URL }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
 jobs:
   summarize_etl:
