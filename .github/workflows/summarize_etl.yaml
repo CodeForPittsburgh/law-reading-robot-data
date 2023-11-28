@@ -27,4 +27,5 @@ jobs:
           python -m pip install chromadb
           # Add other packages as needed
       - name: Run Summarize ETL script
-        run: python law_reader/summarize_etl.py
+        run: |
+          PYTHONPATH=$(pwd) python law_reader/summarize_etl.py
