@@ -16,4 +16,4 @@ Then run commands inside a virtual environemnt with the dependencies installed:
 $ pipenv run python src/hello_world.py
 ```
 
-For more details, see: https://pipenv.pypa.io/en/latest/
+For more details, see: https://pipenv.pypa.io/en/latest
