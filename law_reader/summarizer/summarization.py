@@ -7,17 +7,14 @@ This module provides a class for generating summaries of text using OpenAI's GPT
 """
 
 import os
-import openai
 
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 from langchain.prompts import PromptTemplate
 from langchain.docstore.document import Document
-from langchain.chains.summarize import load_summarize_chain
 from langchain.vectorstores import Chroma
 from langchain.embeddings import GPT4AllEmbeddings
 
@@ -38,15 +35,10 @@ class Summarization(Summarizer):
     def get_text_chunks_into_docs(self, text: str) -> list[Document]:
         """
         Splits the given text into chunks using CharacterTextSplitter and returns a list of Document objects.
-
         **Parameters:**
-
         text (str): The text to be split into chunks.
-
         **Returns:**
-
         list[Document]: A list of Document objects representing the text chunks.
-
         """
         try:
             text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=100)
@@ -58,18 +50,12 @@ class Summarization(Summarizer):
     def get_summary(self, full_text: str) -> str:
         """
         Generates a summary using LLMChain for a given full text by breaking it into smaller chunks.
-
         **Parameters:**
-
         full_text (str): The full text to be summarized.
-
         **Returns:**
-
         str: The generated summary.
-
         """
         try:
-
             ## Split the full text into smaller text chunks
             text_chunks_into_docs = self.get_text_chunks_into_docs(full_text)
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
