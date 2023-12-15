@@ -1,5 +1,7 @@
 # Law Reading Robot: Data
-Runs the ETL layer that extracts relevant information from RSS feeds and GPT4 API
+
+Runs the ETL layer that extracts relevant information from RSS feeds, summarizes text using GPT4, and uploads data to a supabase instance 
+
 Houses supabase configuration, database schemas, and server functions
 
 ## Getting Started
