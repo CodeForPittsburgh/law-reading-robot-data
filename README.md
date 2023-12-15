@@ -25,8 +25,11 @@ Houses supabase configuration, database schemas, and server functions
     * `./__pipenv` - Runs pipenv with python 3.11
 
 ### Linting and Formatting
+
 Formatter: "black"
+
 Linters: "pylint", "flake8"
+
 * Windows Users
     * `.\__python.bat -m black <OPTIONS>`
     * `.\__python.bat -m pylint <OPTIONS>`
