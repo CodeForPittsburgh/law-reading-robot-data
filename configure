@@ -1,0 +1,9 @@
+#!/bin/bash
+
+chmod +x ./__pipenv
+chmod +x ./__python
+chmod +x ./__flake8
+chmod +x ./__pylint
+chmod +x ./__black
+
+./__pipenv install

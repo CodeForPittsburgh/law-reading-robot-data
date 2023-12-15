@@ -16,6 +16,9 @@ supabase-py = "*"
 python-docx = "*"
 feedparser = "*"
 python-dotenv = "*"
+black = "*"
+pylint = "*"
+flake8 = "*"
 
 [dev-packages]
 

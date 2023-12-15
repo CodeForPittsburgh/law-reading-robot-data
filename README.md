@@ -1,19 +1,37 @@
 # Law Reading Robot: Data
-Obtains and organizes the data for the Law Reading Robot.
-
-The partner repo to this is https://github.com/CodeForPittsburgh/law-reading-robot
-
+Runs the ETL layer that extracts relevant information from RSS feeds and GPT4 API
+Houses supabase configuration, database schemas, and server functions
 
 ## Getting Started
 
-Use pipenv to install dependencies:
-```
-$ pipenv install
-```
+### Requirements
+* Python 3.11
+* Windows Users
+    * py launcher (Should be auto-installed alongside python 3.11)
 
-Then run commands inside a virtual environemnt with the dependencies installed:
-```
-$ pipenv run python src/hello_world.py
-```
+### Initial Setup
+* Windows Users
+    * run `setup.bat`
+* Mac and Linux Users
+    * `chmod +x ./configure`
+    * `./configure`
 
-For more details, see: https://pipenv.pypa.io/en/latest
+### Convenience Scripts
+* Windows Users
+    * `.\__python.bat` - Runs any script within the Pipenv environment
+    * `.\__pipenv.bat` - Runs pipenv with python 3.11
+    * `.\__flake8.bat` - Runs flake8 with python 3.11
+    * `.\__pylint.bat` - Runs pylint with python 3.11
+    * `.\__black.bat` - Runs black with python 3.11
+* Mac and Linux Users
+    * `./__python` - Runs any script within the pipenv environment
+    * `./__pipenv` - Runs pipenv with python 3.11
+    * `./__flake8` - Runs flake8 with python 3.11
+    * `./__pylint` - Runs pylint with python 3.11
+    * `./__black` - Runs black with python 3.11
+
+### Using Supabase With Docker
+@todo
+
+### Guidelines for Contribution
+

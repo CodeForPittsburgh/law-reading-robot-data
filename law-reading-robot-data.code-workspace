@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"[python]":{
+			"editor.autoIndent": "full",
+			"editor.detectIndentation": false,
+			"editor.tabSize": 4,
+			"editor.wordWrap": "wordWrapColumn",
+			"editor.wordWrapColumn": 88,
+			"editor.rulers": [88],
+			"editor.formatOnSave": true,
+			"editor.defaultFormatter": "ms-python.black-formatter",	
+			
+		},
+		"terminal.integrated.defaultProfile.osx": "zsh",
+		"terminal.integrated.defaultProfile.windows": "Command Prompt",
+		"python.terminal.activateEnvInCurrentTerminal": false,
+		"python.terminal.activateEnvironment": false,
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+			"ms-python.black-formatter",
+			"ms-python.pylint",
+			"ms-python.flake8"
+		]
+	}
+}
