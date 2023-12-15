@@ -11,7 +11,7 @@ Houses supabase configuration, database schemas, and server functions
 
 ### Initial Setup
 * Windows Users
-    * run `setup.bat`
+    * `.\setup.bat`
 * Mac and Linux Users
     * `chmod +x ./configure`
     * `./configure`
@@ -20,18 +20,25 @@ Houses supabase configuration, database schemas, and server functions
 * Windows Users
     * `.\__python.bat` - Runs any script within the Pipenv environment
     * `.\__pipenv.bat` - Runs pipenv with python 3.11
-    * `.\__flake8.bat` - Runs flake8 with python 3.11
-    * `.\__pylint.bat` - Runs pylint with python 3.11
-    * `.\__black.bat` - Runs black with python 3.11
 * Mac and Linux Users
     * `./__python` - Runs any script within the pipenv environment
     * `./__pipenv` - Runs pipenv with python 3.11
-    * `./__flake8` - Runs flake8 with python 3.11
-    * `./__pylint` - Runs pylint with python 3.11
-    * `./__black` - Runs black with python 3.11
+
+### Linting and Formatting
+Formatter: "black"
+Linters: "pylint", "flake8"
+* Windows Users
+    * `.\__python.bat -m black <OPTIONS>`
+    * `.\__python.bat -m pylint <OPTIONS>`
+    * `.\__python.bat -m flake8 <OPTIONS>`
+* Mac and Linux Users
+    * `./__python -m black <OPTIONS>`
+    * `./__python -m pylint <OPTIONS>`
+    * `./__python -m flake8 <OPTIONS>`
 
 ### Using Supabase With Docker
 @todo
 
 ### Guidelines for Contribution
+@todo
 

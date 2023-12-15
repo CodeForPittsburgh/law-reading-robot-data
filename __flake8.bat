@@ -1,1 +1,0 @@
-%~dp0__python.bat flake8 %*
