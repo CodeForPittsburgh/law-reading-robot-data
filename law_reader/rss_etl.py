@@ -120,18 +120,6 @@ class Extractor:
             return True
         return False
 
-    def get_bill_internal_id(self, bill_identifier: BillIdentifier) -> str:
-        """
-        Gets the bill_internal_id of a bill from the Supabase table "Bills" using the bill's legislative_id.
-        :param bill_identifier: The BillIdentifier object for the bill
-        :return: The bill_internal_id of the bill
-        """
-        statement = self.supa_con.table("Bills").\
-            select("bill_internal_id").\
-            eq("legislative_id", bill_identifier.bill_guid)
-        api_response = statement.execute()
-        return api_response.data[0]["bill_internal_id"]
-
     def create_revisions_output_record(self, revision_rss_feed_entry, bill_identifier: BillIdentifier) -> InsertRecord:
         """
         Creates an OutputRecord for a bill revision, with the revision's metadata as properties.
