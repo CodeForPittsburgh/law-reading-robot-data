@@ -66,3 +66,13 @@ end $$;
 3. Link local Supabase project to Supabase Cloud project by typing `supabase link  --project-ref vsumrxhpkzegrktbtcui`
    1. Note that is project reference ID is specific to the Supabase project. This is found in the Supabase Cloud project settings.
 4. To pull most recent version of project database, type `supabase db pull` and then enter database password. This command will create a migration script in your local `supabase/migrations` directory.
+
+## To reset the local environment to the remote migration (Admin Only)
+1. Type `supabase migration list` to see the migration history
+2. Find the most recent remote migration on the list, and copy the migration ID
+3. Type `supabase migration repair <migration ID> --status reverted` to reset the local environment to the remote migration
+4. Type `supabase db pull` to pull the most recent version of the database from the remote environment
+
+## To make modifications to the table schema
+1. Make changes to the table schema in the Supabase Cloud project and type `supabase db diff -f migration_name`
+2. OR create a manual schema change by typing `supabase migration new migration_name` and modifying the created migration script (located in the migrations directory) using a text editor
