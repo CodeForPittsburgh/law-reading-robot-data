@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from law_reader import BillIdentifier
 from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 
 
@@ -16,23 +17,61 @@ class DBInterface(ABC):
         pass
 
     @abstractmethod
-    def download_bill_text(self, revison_internal_id: int) -> str:
+    def get_bill_internal_id(self, bill_identifier: BillIdentifier) -> str:
+        """
+        Gets the bill_internal_id of a bill from the Supabase table "Bills" using the bill's legislative_id.
+        :param bill_identifier: The BillIdentifier object for the bill
+        :return: The bill_internal_id of the bill
+        """
+        pass
+
+    @abstractmethod
+    def insert(self, table, row_column_dict: dict):
+        """
+        Inserts a row into the given table
+        :param table: The name of the table to insert into
+        :param row_column_dict: A dictionary containing the column names and values
+        :return: The id of the inserted row, or None if the insert failed
+        """
+        pass
+
+    @abstractmethod
+    def create_and_attempt_to_insert_revision(self, revision_rss_feed_entry, bill_identifier: BillIdentifier) -> bool:
+        """
+        Creates a new bill revision record in the database if it does not already exist.
+        :param revision_rss_feed_entry: The RSS feed entry for the bill revision
+        :param bill_identifier: The BillIdentifier object for the bill
+        :return: True if a new record was inserted, False if not
+        """
+        pass
+
+    @abstractmethod
+    def create_and_attempt_to_insert_bill(self, bill_identifier: BillIdentifier) -> bool:
+        """
+        Creates a new bill record in the database if it does not already exist.
+        :param bill_identifier: The BillIdentifier object for the bill
+        :return: True if a new record was inserted, False if not
+        """
+        pass
+
+    @abstractmethod
+    def download_bill_text(self, revision_guid: str) -> str:
         """
         Downloads the full text of a bill from the database
-        :param revison_internal_id: the unique id of the bill
+        :param revision_guid: the unique id of the bill
         :return: the full text of the bill
         """
         pass
 
-    def upload_summary(self, revision_info: RevisionSummaryInfo, summary_text: str):
+    def upload_summary(self, revision_guid: str, summary_text: str):
         """
         Uploads a summary to the database, linking it to the appropriate entry in the "Revisions" table
-        :param revision_info: the unique id of the bill
+        :param revision_guid: the unique id of the bill
         :param summary_text: the text of the summary
         """
         pass
 
-    def get_revisions_without_summaries(self) -> list[RevisionSummaryInfo]:
+    def get_revisions_without_summaries(self) -> list[str]:
         """
         Gets the unique ids of all bills without summaries
         :return: a list of unique ids of bills without summaries
