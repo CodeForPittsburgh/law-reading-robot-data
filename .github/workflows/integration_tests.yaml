@@ -1,0 +1,40 @@
+name: Run Integration Tests
+
+# Run on pull requests to master branch from dev branch
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'integration_tests/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+      SUPABASE_DB_HOST: ${{ secrets.STAGING_DB_HOST }}
+      SUPABASE_DB_PORT: ${{ secrets.STAGING_DB_PORT }}
+
+    steps:
+      - name: Checkout Repo Content
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+      - name: Setup Python Path
+        run: echo "PYTHONPATH=$PYTHONPATH:." >> $GITHUB_ENV
+      - name: Install Python Packages
+        run: |
+          python -m pip install python-docx
+          python -m pip install supabase
+          python -m pip install python-dotenv
+          python -m pip install feedparser
+          python -m pip install openai
+          python -m pip install gpt4all
+          python -m pip install chromadb
+          python -m pip install langchain
+      - name: Run Tests
+        run: python -m unittest integration_tests
