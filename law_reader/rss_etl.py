@@ -139,12 +139,13 @@ class Extractor:
         :param bill_identifier: The BillIdentifier object for the bill
         :return: An OutputRecord for the bill revision
         """
-        revision = Revision(self.get_bill_internal_id(bill_identifier),
-                            bill_identifier.printer_number,
-                            revision_rss_feed_entry["link"],
-                            revision_rss_feed_entry["published"],
-                            revision_rss_feed_entry["guid"],
-                            revision_rss_feed_entry["description"])
+        revision = Revision(
+            bill_id=bill_identifier.bill_guid,
+            printer_no=bill_identifier.printer_number,
+            full_text_link=revision_rss_feed_entry["link"],
+            publication_date=revision_rss_feed_entry["published"],
+            revision_guid=revision_rss_feed_entry["guid"],
+            description=revision_rss_feed_entry["description"])
         return InsertRecord.insert_record_for_revision(self.supa_con, revision)
 
     def create_bill_output_record(self, bill_identifier: BillIdentifier) -> InsertRecord:
@@ -153,9 +154,13 @@ class Extractor:
         :param bill_identifier: The BillIdentifier object for the bill
         :return: An OutputRecord for the bill
         """
-        bill = Bill(bill_identifier.bill_number, bill_identifier.bill_guid,
-                    bill_identifier.legislative_session,
-                    bill_identifier.session_type, bill_identifier.chamber)
+        bill = Bill(
+            bill_number=bill_identifier.bill_number,
+            legislative_id=bill_identifier.bill_guid,
+            legislative_session=bill_identifier.legislative_session,
+            session_type=bill_identifier.session_type,
+            chamber=bill_identifier.chamber
+        )
         return InsertRecord.insert_record_for_bill(self.supa_con, bill)
 
     def insert_new_record(self, out_rec: InsertRecord):
