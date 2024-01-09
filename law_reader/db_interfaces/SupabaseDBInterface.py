@@ -1,8 +1,7 @@
 import os
 
 from postgrest.types import CountMethod
-from supabase import Client
-from supabase._async.client import create_client
+from supabase import Client, create_client
 
 from law_reader.common import RevisionSummaryInfo
 from law_reader.db_interfaces.DBInterface import DBInterface
