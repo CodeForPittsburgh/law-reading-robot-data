@@ -1,0 +1,22 @@
+name: 'backup-database'
+on:
+  pull_request:
+  schedule:
+  - cron: '0 0 * * *' # Runs every day at midnight
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    env:
+      supabase_db_url: ${{ secrets.SUPABASE_DB_URL }}   
+    steps:
+      - uses: actions/checkout@v3
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Backup roles
+        run: supabase db dump --db-url "$supabase_db_url" -f roles.sql --role-only
+      - name: Backup schema
+        run: supabase db dump --db-url "$supabase_db_url" -f schema.sql
+      - name: Backup data
+        run: supabase db dump --db-url "$supabase_db_url" -f data.sql --data-only --use-copy
