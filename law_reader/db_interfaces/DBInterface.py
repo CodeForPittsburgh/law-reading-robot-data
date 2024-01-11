@@ -30,12 +30,13 @@ class DBInterface(ABC):
         pass
 
     @abstractmethod
-    def insert(self, table, row_column_dict: dict):
+    def insert(self, table, row_column_dict: dict, return_column: str = ""):
         """
         Inserts a row into the given table
         :param table: The name of the table to insert into
         :param row_column_dict: A dictionary containing the column names and values
-        :return: The id of the inserted row, or None if the insert failed
+        :param return_column: The column to return
+        :return: The id of the return column, or None
         """
         pass
 
