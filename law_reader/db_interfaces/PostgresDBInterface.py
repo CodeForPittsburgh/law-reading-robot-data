@@ -1,7 +1,6 @@
 import psycopg2
 
 from law_reader import DBInterface, BillIdentifier, InvalidRTUniqueIDException, Revision
-from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 
 
 class PostgresDBInterface(DBInterface):
