@@ -25,6 +25,7 @@ from .summarizer import Summarizer
 class Summarization(Summarizer):
 
     def __init__(self, llm=None):
+        super().__init__(llm)
         api_key = os.environ['OPENAI_API_KEY']
 
         if not api_key:
@@ -58,22 +59,23 @@ class Summarization(Summarizer):
         try:
             ## Split the full text into smaller text chunks
             text_chunks_into_docs = self.get_text_chunks_into_docs(full_text)
-            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-            all_splits = text_splitter.split_documents(text_chunks_into_docs)
+             # create simple ids
+            ids = [str(i) for i in range(1, len(text_chunks_into_docs) + 1)]
+        
 
             ## Create a vectorstore from the text chunks using Chroma and GPT-4 embeddings.
-            vectorstore = Chroma.from_documents(documents=all_splits, embedding=GPT4AllEmbeddings())
+            vectorstore = Chroma.from_documents(documents=text_chunks_into_docs, embedding=GPT4AllEmbeddings(), ids=ids)
 
             ## Define a prompt for summarization.
             prompt = PromptTemplate.from_template(
-                "Summarize in simple words. Include important details of the bill in 250 words: {docs}"
+                "Summarize in simple words. Extract important details of the bill in 250 words: {docs}"
             )
 
             ## Create an LLMChain with the defined prompt and enable verbosity to debug.
             llm_chain = LLMChain(llm=self.llm, prompt=prompt, verbose=False)
 
             ## Define a question to ask the model for summarization.
-            question = "Write a summary within 200 words. "
+            question = "Give a brief about the bill? "
 
             """ 
          Chroma vector store similarity search allows the LLM chain to focus on the relevant
@@ -84,6 +86,9 @@ class Summarization(Summarizer):
 
             ## Generate a summary using the LLMChain
             result = llm_chain(docs)
+            
+            #clear the vectorstore using the ids
+            vectorstore._collection.delete(ids=ids)
 
             ## Output
             return result["text"]
