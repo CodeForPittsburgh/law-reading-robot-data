@@ -53,7 +53,8 @@ class PostgresDBInterface(DBInterface):
         Inserts a row into the given table
         :param table: The name of the table to insert into
         :param row_column_dict: A dictionary containing the column names and values
-        :return: The id of the inserted row, or None if the insert failed
+        :param return_column: The column to return
+        :return: The id of the return column, or None
         """
         sql_script = f"INSERT INTO \"{table}\" ("
         for column in row_column_dict.keys():
