@@ -31,7 +31,8 @@ class SupabaseDBInterface(DBInterface):
         Inserts a row into the given table
         :param table: The name of the table to insert into
         :param row_column_dict: A dictionary containing the column names and values
-        :return: The id of the inserted row, or None if the insert failed
+        :param return_column: The column to return
+        :return: The id of the return column, or None
         """
         api_response = self.supabase_connection.table(table).insert(row_column_dict).execute()
         if return_column != "":

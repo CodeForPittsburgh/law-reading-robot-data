@@ -27,7 +27,6 @@ class TestPostgresDBInterface(unittest.TestCase):
                 revision_guid="11110SB111P2222",
             )
             revision = Revision(
-                bill_internal_id="FakeID",
                 printer_no="2222",
                 full_text_link="https://www.fakeurl.com/abc123xyz",
                 publication_date="2021-01-01",
