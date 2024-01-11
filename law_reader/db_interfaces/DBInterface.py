@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
 from law_reader import BillIdentifier
-from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 
 
 class DBInterface(ABC):
@@ -16,12 +15,17 @@ class DBInterface(ABC):
     def __init__(self):
         pass
 
-    @abstractmethod
-    def get_bill_internal_id(self, bill_identifier: BillIdentifier) -> str:
+    # region Basic database operations
+
+    #endregion
+
+    def select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
         """
-        Gets the bill_internal_id of a bill from the Supabase table "Bills" using the bill's legislative_id.
-        :param bill_identifier: The BillIdentifier object for the bill
-        :return: The bill_internal_id of the bill
+        Selects rows from the given table and returns them
+        :param table: The name of the table to select from
+        :param columns: A list of column names to select
+        :param where_conditions: A dictionary defining the WHERE conditions (column: value)
+        :return: The selected rows, as a list of dictionaries (column: value)
         """
         pass
 
@@ -34,6 +38,30 @@ class DBInterface(ABC):
         :return: The id of the inserted row, or None if the insert failed
         """
         pass
+
+    #region Intermediate Database Operations
+
+    def row_exists(self, table: str, where_conditions: dict) -> bool:
+        """
+        Checks if a row exists in the given table
+        :param table: The name of the table to check
+        :param where_conditions: A dictionary defining the WHERE conditions (column: value)
+        :return: True if a row exists, False if not
+        """
+        pass
+
+    #endregion
+
+    @abstractmethod
+    def get_bill_internal_id(self, bill_identifier: BillIdentifier) -> str:
+        """
+        Gets the bill_internal_id of a bill from the Supabase table "Bills" using the bill's legislative_id.
+        :param bill_identifier: The BillIdentifier object for the bill
+        :return: The bill_internal_id of the bill
+        """
+        pass
+
+
 
     @abstractmethod
     def create_and_attempt_to_insert_revision(self, revision_rss_feed_entry, bill_identifier: BillIdentifier) -> bool:
