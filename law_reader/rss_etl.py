@@ -64,14 +64,20 @@ class Extractor:
                 continue
 
             bill_identifier = BillIdentifier(bill["guid"])
-            new_bill_insertion = self.create_and_attempt_to_insert_bill(bill_identifier)
-            new_revision_insertion = self.create_and_attempt_to_insert_revision(bill, bill_identifier)
+            bill_internal_id = self.create_and_attempt_to_insert_bill(bill_identifier)
+            new_bill_insertion = bill_internal_id is not None
+            new_revision_insertion = self.create_and_attempt_to_insert_revision(bill, bill_identifier, bill_internal_id)
             if new_bill_insertion or new_revision_insertion:
                 new_entry_count -= 1
             if new_entry_count == 0:
                 break
 
-    def create_and_attempt_to_insert_revision(self, revision_rss_feed_entry, bill_identifier: BillIdentifier) -> bool:
+    def create_and_attempt_to_insert_revision(
+            self,
+            revision_rss_feed_entry,
+            bill_identifier: BillIdentifier,
+            bill_internal_id: str
+    ) -> bool:
         """
         Creates a new bill revision record in the table "Revisions" if it does not already exist.
         :param revision_rss_feed_entry: The RSS feed entry for the bill revision
@@ -83,6 +89,7 @@ class Extractor:
                 table="Revisions",
                 where_conditions={"revision_guid": revisions_output_record.output_dict["revision_guid"]}
         ):
+            revisions_output_record.output_dict.update({"bill_internal_id": bill_internal_id})
             self.db_interface.insert(
                 table="Revisions",
                 row_column_dict=revisions_output_record.output_dict,
@@ -90,23 +97,22 @@ class Extractor:
             return True
         return False
 
-    def create_and_attempt_to_insert_bill(self, bill_identifier: BillIdentifier) -> bool:
+    def create_and_attempt_to_insert_bill(self, bill_identifier: BillIdentifier) -> str:
         """
         Creates a new bill record in the table "Bills" if it does not already exist.
         :param bill_identifier: The BillIdentifier object for the bill
-        :return: True if a new record was inserted, False if not
+        :return: The bill_internal_id of the bill
         """
         bills_output_record = self.create_bill_output_record(bill_identifier)
         if not self.db_interface.row_exists(
-                table="Bills",
-                where_conditions={"legislative_id": bills_output_record.output_dict["legislative_id"]}
+            table="Bills",
+            where_conditions={"legislative_id": bills_output_record.output_dict["legislative_id"]},
         ):
-            self.db_interface.insert(
+            return self.db_interface.insert(
                 table="Bills",
                 row_column_dict=bills_output_record.output_dict,
+                return_column="bill_internal_id"
             )
-            return True
-        return False
 
     def get_bill_internal_id(self, bill_identifier: BillIdentifier) -> str:
         """
@@ -129,13 +135,12 @@ class Extractor:
         :return: An OutputRecord for the bill revision
         """
         revision = Revision(
-            bill_id=bill_identifier.bill_guid,
             printer_no=bill_identifier.printer_number,
             full_text_link=revision_rss_feed_entry["link"],
             publication_date=revision_rss_feed_entry["published"],
             revision_guid=revision_rss_feed_entry["guid"],
             description=revision_rss_feed_entry["description"])
-        return InsertRecord.insert_record_for_revision(self.supa_con, revision)
+        return InsertRecord.insert_record_for_revision(revision)
 
     def create_bill_output_record(self, bill_identifier: BillIdentifier) -> InsertRecord:
         """
@@ -150,7 +155,7 @@ class Extractor:
             session_type=bill_identifier.session_type,
             chamber=bill_identifier.chamber
         )
-        return InsertRecord.insert_record_for_bill(self.supa_con, bill)
+        return InsertRecord.insert_record_for_bill(bill)
 
     def insert_new_record(self, out_rec: InsertRecord):
         """
