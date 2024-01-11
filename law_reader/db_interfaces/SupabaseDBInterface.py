@@ -2,7 +2,9 @@ import os
 
 from postgrest.types import CountMethod
 from supabase import Client, create_client
+from dotenv import load_dotenv
 
+from law_reader import BillIdentifier
 from law_reader.common import RevisionSummaryInfo
 from law_reader.db_interfaces.DBInterface import DBInterface
 from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
@@ -17,13 +19,56 @@ class SupabaseDBInterface(DBInterface):
         super().__init__()
         # if debug flag is set, pull data from .env file
         # In production, the environment variables will be set in the github actions workflow
-        if debug:
-            from dotenv import load_dotenv
-            load_dotenv()  # Load environment variables from .env file
-        sb_api_url = os.environ["SUPABASE_API_URL"]  # github actions secret management
-        sb_api_key = os.environ["SUPABASE_API_KEY"]  # github actions secret management
+        load_dotenv()  # Load environment variables from .env file
+        sb_api_url = os.environ.get("SUPABASE_API_URL")  # github actions secret management
+        sb_api_key = os.environ.get("SUPABASE_API_KEY")  # github actions secret management
 
         self.supabase_connection: Client = create_client(sb_api_url, sb_api_key)
+
+    # region Basic database operations
+    def insert(self, table, row_column_dict: dict, return_column: str = ""):
+        """
+        Inserts a row into the given table
+        :param table: The name of the table to insert into
+        :param row_column_dict: A dictionary containing the column names and values
+        :return: The id of the inserted row, or None if the insert failed
+        """
+        api_response = self.supabase_connection.table(table).insert(row_column_dict).execute()
+        if return_column != "":
+            return api_response.data[0][return_column]
+
+    def select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
+        """
+        Selects rows from the given table and returns them
+        :param table: The name of the table to select from
+        :param columns: A list of column names to select
+        :param where_conditions: A dictionary defining the WHERE conditions (column: value)
+        :return: The selected rows, as a list of dictionaries (column: value)
+        """
+        statement = self.supabase_connection.table(table).select(*columns)
+        if where_conditions is not None:
+            for column in where_conditions:
+                statement = statement.eq(column, where_conditions[column])
+        api_response = statement.execute()
+        return api_response.data
+    #endregion
+
+    #region Intermediate Database Operations
+
+    def row_exists(self, table: str, where_conditions: dict) -> bool:
+        """
+        Checks if a row exists in the given table
+        :param table: The name of the table to check
+        :param where_conditions: A dictionary defining the WHERE conditions (column: value)
+        :return: True if a row exists, False if not
+        """
+        statement = self.supabase_connection.table(table).select("*", count=CountMethod.exact)
+        for column in where_conditions:
+            statement = statement.eq(column, where_conditions[column])
+        api_response = statement.execute()
+        return api_response.count > 0
+
+    #endregion
 
     def download_bill_text(self, revison_internal_id: str) -> str:
         """
@@ -72,3 +117,16 @@ class SupabaseDBInterface(DBInterface):
             is_("active_summary_id", "NULL").\
             execute()
         return [RevisionSummaryInfo(revision["revision_guid"], revision["rt_unique_id"], revision["revision_internal_id"]) for revision in api_response.data]
+
+
+    #region rss_etl
+    def create_and_attempt_to_insert_bill(self, bill_identifier: BillIdentifier) -> bool:
+        pass
+
+    def create_and_attempt_to_insert_revision(self, revision_rss_feed_entry, bill_identifier: BillIdentifier) -> bool:
+        pass
+
+    def get_bill_internal_id(self, bill_identifier: BillIdentifier) -> str:
+        pass
+
+    #endregion
