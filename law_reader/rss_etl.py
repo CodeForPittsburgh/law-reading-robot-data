@@ -2,7 +2,7 @@ from dataclasses import asdict
 import feedparser
 import os
 
-from db_interfaces import DBInterface, SupabaseDBInterface
+from law_reader.db_interfaces import DBInterface, SupabaseDBInterface
 from law_reader.common import BillIdentifier, Bill, Revision, LegislativeChamber
 
 """
