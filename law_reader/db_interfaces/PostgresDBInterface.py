@@ -1,7 +1,6 @@
 import psycopg2
 
 from law_reader import DBInterface, BillIdentifier, InvalidRTUniqueIDException, Revision
-from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 
 
 class PostgresDBInterface(DBInterface):
@@ -27,13 +26,13 @@ class PostgresDBInterface(DBInterface):
         self.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
         return self.fetchall()
 
-    def select(self, table, columns: list[str], where_conditions: dict = None) -> list[tuple]:
+    def select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
         """
         Selects rows from the given table and returns them
         :param table: The name of the table to select from
         :param columns: A list of column names to select
         :param where_conditions: A dictionary defining the WHERE conditions (column: value)
-        :return: The selected rows
+        :return: The selected rows, as a list of dictionaries (column: value)
         """
         sql_script = f"SELECT "
         for column in columns:
@@ -45,7 +44,9 @@ class PostgresDBInterface(DBInterface):
                 sql_script += f"{column} = %s AND "
             sql_script = sql_script[:-5]
         self.execute(sql_script, list(where_conditions.values()))
-        return self.fetchall()
+        result = self.fetchall()
+        # Convert to list of dictionaries
+        return [dict(zip(columns, row)) for row in result]
 
     def insert(self, table, row_column_dict: dict, return_column: str = ""):
         """
@@ -265,7 +266,7 @@ class PostgresDBInterface(DBInterface):
         )
         # If bill exists, retrieve bill_internal_id
         if len(select_results) == 1:
-            bill_internal_id = select_results[0][0]
+            bill_internal_id = select_results[0]["bill_internal_id"]
         # If more than one entry was returned, throw an error
         elif len(select_results) > 1:
             raise Exception("More than one row was returned")
