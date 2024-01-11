@@ -5,8 +5,6 @@ on:
   pull_request:
     branches:
       - master
-    paths:
-      - 'integration_tests/**'
 
 jobs:
   deploy:
@@ -42,4 +40,4 @@ jobs:
           python -m pip install chromadb
           python -m pip install langchain
       - name: Run Tests
-        run: python -m unittest integration_tests
+        run: python -m unittest tests_integration
