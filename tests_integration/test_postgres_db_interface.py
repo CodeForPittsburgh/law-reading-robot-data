@@ -1,6 +1,8 @@
 import os
 import unittest
 
+from dotenv import load_dotenv
+
 from db_interfaces.PostgresDBInterface import PostgresDBInterface
 from law_reader import BillIdentifier, Revision
 from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
@@ -9,6 +11,7 @@ class TestPostgresDBInterface(unittest.TestCase):
 
 
         def setUp(self):
+            load_dotenv()  # Load environment variables from .env file
             # Create a PostgresDBInterface object
             self.db_interface = PostgresDBInterface(
                 db_password=os.environ.get("SUPABASE_DB_PASSWORD"),
