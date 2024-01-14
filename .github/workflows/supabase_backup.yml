@@ -39,11 +39,9 @@ jobs:
         sudo apt install postgresql-client-15 -y
 
 #  Debug statements
-    - name: Print Postgres version
+    - name: Debug statements
       run: |
-        pg_dump --version
-        which pg_dump
-        whereis pg_dump
+        ls /usr/lib/postgresql
 
       # Reference for pg_dump code (partially modified from source): https://github.com/mansueli/Supa-Migrate/
     - name: Dump PostgreSQL database
@@ -51,7 +49,7 @@ jobs:
         PRODUCTION_DB_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
         PRODUCTION_DB_URL: ${{ secrets.PRODUCTION_DB_URL }}
       run: |
-        pg_dump "postgres://postgres:${PRODUCTION_DB_PASSWORD}@${PRODUCTION_DB_URL}/postgres" \
+        /usr/lib/postgresql/15/bin/pg_dump "postgres://postgres:${PRODUCTION_DB_PASSWORD}@${PRODUCTION_DB_URL}/postgres" \
           --quote-all-identifiers \
           --exclude-table-data 'storage.objects' \
           --exclude-schema 'extensions|graphql|graphql_public|net|tiger|pgbouncer|vault|_realtime|supabase_functions|storage|pg*|schema_migrations|information_schema' \
