@@ -30,16 +30,16 @@ jobs:
     - name: Install AWS CLI
       run: sudo apt-get install awscli
 
-    - name: Install PostgreSQL
-      run: sudo apt-get install postgresql-15
+#    - name: Install PostgreSQL
+#      run: sudo apt-get install postgresql-15
 
-    # Postgres SQL Client 15 is required to dump the database -- Supabase's Postgres version is 15
-#    - name: Install postgresql-client-15
-#      run: |
-#        sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-#        wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
-#        sudo apt update
-#        sudo apt install postgresql-client-15 -y
+#     Postgres SQL Client 15 is required to dump the database -- Supabase's Postgres version is 15
+    - name: Install postgresql-client-15
+      run: |
+        sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+        wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+        sudo apt update
+        sudo apt install postgresql-15 -y
 
       # Reference for pg_dump code (partially modified from source): https://github.com/mansueli/Supa-Migrate/
     - name: Dump PostgreSQL database
