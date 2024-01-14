@@ -14,15 +14,6 @@ jobs:
   backup-database:
     runs-on: ubuntu-latest
 
-#    services:
-#      postgres:
-#        image: postgres
-#        env:
-#          POSTGRES_USER: postgres
-#          POSTGRES_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
-#          POSTGRES_DB: postgres
-
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -38,11 +29,6 @@ jobs:
         sudo apt update
         sudo apt install postgresql-client-15 -y
 
-#  Debug statements
-    - name: Debug statements
-      run: |
-        ls /usr/lib/postgresql
-
       # Reference for pg_dump code (partially modified from source): https://github.com/mansueli/Supa-Migrate/
     - name: Dump PostgreSQL database
       env:
@@ -54,9 +40,10 @@ jobs:
           --exclude-table-data 'storage.objects' \
           --exclude-schema 'extensions|graphql|graphql_public|net|tiger|pgbouncer|vault|_realtime|supabase_functions|storage|pg*|schema_migrations|information_schema' \
           > full_db.sql
+        ls 
 
     - name: Upload to AWS S3
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: aws s3 cp full_db.sql s3://cpp-lrr-database-backup
+      run: aws s3 cp full_db.sql s3://cpp-lrr-database-backup --debug
