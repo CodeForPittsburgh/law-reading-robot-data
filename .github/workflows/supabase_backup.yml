@@ -31,7 +31,7 @@ jobs:
       run: sudo apt-get install awscli
 
     - name: Install PostgreSQL
-      run: sudo apt-get install postgresql-client-15
+      run: sudo apt-get install postgresql-15
 
     # Postgres SQL Client 15 is required to dump the database -- Supabase's Postgres version is 15
 #    - name: Install postgresql-client-15
