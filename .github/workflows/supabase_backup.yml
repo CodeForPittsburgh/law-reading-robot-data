@@ -1,0 +1,52 @@
+name: Database Backup Workflow
+
+# Triggers the workflow on push or pull request, but you can set it as per your requirement
+on:
+  schedule:
+    # Runs at 00:00 UTC every Sunday
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+    # This allows the workflow to be manually triggered
+#  push:
+#    branches:
+#      - master
+
+jobs:
+  backup-database:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install AWS CLI
+      run: sudo apt-get install awscli
+
+    - uses: supabase/setup-cli@v1
+      with:
+        version: latest
+
+# Postgres SQL Client 15 is required to dump the database -- Supabase's Postgres version is 15
+    - name: Install postgresql-client-15
+      run: |
+        sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+        wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+        sudo apt update
+        sudo apt install postgresql-client-15 -y
+
+    - name: Dump PostgreSQL database
+      env:
+        PRODUCTION_DB_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
+        SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      run: |
+        pg_dump "postgres://postgres:${SUPABASE_DB_PASSWORD}@${SUPABASE_DB_URL}/postgres" \
+          --quote-all-identifiers \
+          --exclude-table-data 'storage.objects' \
+          --exclude-schema 'extensions|graphql|graphql_public|net|tiger|pgbouncer|vault|_realtime|supabase_functions|storage|pg*|schema_migrations|information_schema' \
+          > full_db.sql
+
+    - name: Upload to AWS S3
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: aws s3 cp full_db.sql s3://cpp-lrr-database-backup
