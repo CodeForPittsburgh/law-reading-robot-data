@@ -21,10 +21,6 @@ jobs:
     - name: Install AWS CLI
       run: sudo apt-get install awscli
 
-    - uses: supabase/setup-cli@v1
-      with:
-        version: latest
-
     # Postgres SQL Client 15 is required to dump the database -- Supabase's Postgres version is 15
     - name: Install postgresql-client-15
       run: |
