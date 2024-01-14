@@ -43,7 +43,7 @@ jobs:
       run: |
         pg_dump --version
         which pg_dump
-        locate pg_dump | grep postgresql-client-15
+        whereis pg_dump
 
       # Reference for pg_dump code (partially modified from source): https://github.com/mansueli/Supa-Migrate/
     - name: Dump PostgreSQL database
