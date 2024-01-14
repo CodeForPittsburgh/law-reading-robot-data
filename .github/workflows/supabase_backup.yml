@@ -14,13 +14,13 @@ jobs:
   backup-database:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
-          POSTGRES_DB: postgres
+#    services:
+#      postgres:
+#        image: postgres
+#        env:
+#          POSTGRES_USER: postgres
+#          POSTGRES_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
+#          POSTGRES_DB: postgres
 
 
     steps:
@@ -29,6 +29,9 @@ jobs:
 
     - name: Install AWS CLI
       run: sudo apt-get install awscli
+
+    - name: Install PostgreSQL
+      run: sudo apt-get install postgresql-client-15
 
     # Postgres SQL Client 15 is required to dump the database -- Supabase's Postgres version is 15
 #    - name: Install postgresql-client-15
