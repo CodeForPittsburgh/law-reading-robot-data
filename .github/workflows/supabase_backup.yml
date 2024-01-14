@@ -1,6 +1,5 @@
 name: Database Backup Workflow
 
-# Triggers the workflow on push or pull request, but you can set it as per your requirement
 on:
   schedule:
     # Runs at 00:00 UTC every Sunday
@@ -26,7 +25,7 @@ jobs:
       with:
         version: latest
 
-# Postgres SQL Client 15 is required to dump the database -- Supabase's Postgres version is 15
+    # Postgres SQL Client 15 is required to dump the database -- Supabase's Postgres version is 15
     - name: Install postgresql-client-15
       run: |
         sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -34,12 +33,13 @@ jobs:
         sudo apt update
         sudo apt install postgresql-client-15 -y
 
+      # Reference for pg_dump code (partially modified from source): https://github.com/mansueli/Supa-Migrate/
     - name: Dump PostgreSQL database
       env:
         PRODUCTION_DB_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
-        SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        PRODUCTION_DB_URL: ${{ secrets.PRODUCTION_DB_URL }}
       run: |
-        pg_dump "postgres://postgres:${SUPABASE_DB_PASSWORD}@${SUPABASE_DB_URL}/postgres" \
+        pg_dump "postgres://postgres:${PRODUCTION_DB_PASSWORD}@${PRODUCTION_DB_URL}/postgres" \
           --quote-all-identifiers \
           --exclude-table-data 'storage.objects' \
           --exclude-schema 'extensions|graphql|graphql_public|net|tiger|pgbouncer|vault|_realtime|supabase_functions|storage|pg*|schema_migrations|information_schema' \
