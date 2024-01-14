@@ -14,6 +14,15 @@ jobs:
   backup-database:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
+          POSTGRES_DB: postgres
+
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -22,12 +31,12 @@ jobs:
       run: sudo apt-get install awscli
 
     # Postgres SQL Client 15 is required to dump the database -- Supabase's Postgres version is 15
-    - name: Install postgresql-client-15
-      run: |
-        sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-        wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
-        sudo apt update
-        sudo apt install postgresql-client-15 -y
+#    - name: Install postgresql-client-15
+#      run: |
+#        sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+#        wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+#        sudo apt update
+#        sudo apt install postgresql-client-15 -y
 
       # Reference for pg_dump code (partially modified from source): https://github.com/mansueli/Supa-Migrate/
     - name: Dump PostgreSQL database
