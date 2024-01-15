@@ -43,4 +43,4 @@ jobs:
           python -m pip install requests
           python -m pip install psycopg2
       - name: Run Tests
-        run: python -m unittest tests_integration
+        run: python -m unittest discover -s tests_integration
