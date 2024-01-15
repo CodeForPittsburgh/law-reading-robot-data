@@ -14,6 +14,9 @@ jobs:
       SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
       SUPABASE_DB_HOST: ${{ secrets.STAGING_DB_HOST }}
       SUPABASE_DB_PORT: ${{ secrets.STAGING_DB_PORT }}
+      SUPABASE_API_KEY: ${{ secrets.STAGING_API_KEY }}
+      SUPABASE_API_URL: ${{ secrets.STAGING_API_URL }}
+
 
     steps:
       - name: Check branch
