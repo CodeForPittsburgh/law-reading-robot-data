@@ -49,9 +49,7 @@ class TestETLIntegration(unittest.TestCase):
         for table in tables:
             sql_script += f"TRUNCATE \"{table}\" CASCADE;"
         pg_interface.cursor.execute(sql_script)
-
-
-        pass
+        pg_interface.commit()
 
     # region Mocks
     @staticmethod
@@ -159,7 +157,7 @@ class TestETLIntegration(unittest.TestCase):
         )
         #endregion
         #region summary_etl
-        with mock.patch('summarize_etl.summarize_bill', new=self.mock_summarize_bill):
+        with mock.patch('law_reader.summarize_etl.summarize_bill', new=self.mock_summarize_bill):
             summarize_etl.summarize_all_unsummarized_revisions(self.db_interface)
 
         # Check that the correct number of summaries were inserted into the summaries table
