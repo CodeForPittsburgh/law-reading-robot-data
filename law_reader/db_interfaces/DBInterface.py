@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from law_reader import BillIdentifier
+from common.RevisionSummaryInfo import RevisionSummaryInfo
+from law_reader import BillIdentifier, Revision
 
 
 class DBInterface(ABC):
@@ -18,7 +19,7 @@ class DBInterface(ABC):
     # region Basic database operations
 
     #endregion
-
+    @abstractmethod
     def select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
         """
         Selects rows from the given table and returns them
@@ -41,7 +42,7 @@ class DBInterface(ABC):
         pass
 
     #region Intermediate Database Operations
-
+    @abstractmethod
     def row_exists(self, table: str, where_conditions: dict) -> bool:
         """
         Checks if a row exists in the given table
@@ -92,17 +93,39 @@ class DBInterface(ABC):
         """
         pass
 
-    def upload_summary(self, revision_guid: str, summary_text: str):
+    @abstractmethod
+    def upload_summary(self, revision_info: RevisionSummaryInfo, summary_text: str):
         """
-        Uploads a summary to the database, linking it to the appropriate entry in the "Revisions" table
-        :param revision_guid: the unique id of the bill
+        Uploads a summary to Supabase, linking it to the appropriate entry in the "Revisions" table
+        :param revision_info: a RevisionSummaryInfo object containing information about the revision
         :param summary_text: the text of the summary
         """
         pass
 
-    def get_revisions_without_summaries(self) -> list[str]:
+    @abstractmethod
+    def get_revisions_without_summaries(self) -> list[RevisionSummaryInfo]:
         """
         Gets the unique ids of all bills without summaries
         :return: a list of unique ids of bills without summaries
         """
         pass
+
+    #region docx_etl
+    @abstractmethod
+    def get_revisions_without_bill_text(self) -> list[Revision]:
+        """
+        Gets the unique ids of all bills without bill text
+        :return: a list of unique ids of bills without bill text
+        """
+        pass
+
+    def upload_bill_text(self, full_text: str, revision_guid: str):
+        """
+        Uploads the law text from a .docx file to Supabase's "Revision_Text" table,
+        linking it to the appropriate entry in the "Revisions" table
+        :param full_text: full text of the bill revision
+        :param revision_guid: guid of the bill revision
+        """
+        pass
+
+    #endregion

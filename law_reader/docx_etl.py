@@ -6,13 +6,7 @@ import os
 import subprocess
 import requests
 
-# TODO: This code is identical to the code of my latest draft in law_reader\rss-etl.py. Consider refactoring to avoid duplication.
-DEBUG = True  # Set to True to print debug messages
-if DEBUG:
-    from dotenv import load_dotenv
-    load_dotenv()  # Load environment variables from .env file
-sb_api_url = os.environ["SUPABASE_API_URL"]  # github actions secret management
-sb_api_key = os.environ["SUPABASE_API_KEY"]  # github actions secret management
+from law_reader import DBInterface, SupabaseDBInterface
 
 
 def make_temp_if_not_exists():
@@ -75,41 +69,20 @@ def extract_law_text_from_docx(bill_path: str) -> str:
     return output_text
 
 
-def extract_and_upload_missing_bill_text(supa_con: Client):
+def extract_and_upload_missing_bill_text(db_interface: DBInterface):
     """
     Extracts the law text from a .docx file and uploads it to Supabase
-    :param supa_con: Supabase connection object
+    :param db_interface: a DBInterface object
     """
     # TODO: Modify so that this might also pull records which have not had a summary prior to a certain date
-    bill_records_missing_text = supa_con.table("Revisions").select("*").filter("rt_unique_id", "is", "null").execute()
-    for record in bill_records_missing_text.data:
-        bill_path = download_bill_doc_file(record["full_text_link"])
+    bill_records_missing_text = db_interface.get_revisions_without_bill_text()
+    for revision in bill_records_missing_text:
+        bill_path = download_bill_doc_file(revision.full_text_link)
         bill_docx_path = convert_doc_to_docx(bill_path)
         bill_text = extract_law_text_from_docx(bill_docx_path)
         os.remove(bill_path)
         os.remove(bill_docx_path)
-        upload_bill_text(supa_con, bill_text, record["revision_guid"])
-
-
-def upload_bill_text(supa_con: Client, full_text: str, revision_guid: str):
-    """
-    Uploads the law text from a .docx file to Supabase's "Revision_Text" table,
-    linking it to the appropriate entry in the "Revisions" table
-    :param supa_con: Supabase connection object
-    :param full_text: full text of the bill revision
-    :param revision_guid: guid of the bill revision
-    """
-
-    # Insert full text as entry in Revision_Text table, retrieving the rt_unique_id of the new entry
-    # TODO: Check that this function returns the rt_unique_id of the new entry
-    print("Uploading bill text to Supabase")
-    response = supa_con.table('Revision_Text').insert({"full_text": full_text}).execute()
-    rt_unique_id = response.data[0]["rt_unique_id"]
-
-    # Update relevant entry in Revisions table (found with revision guid) with rt_unique_id of  new entry in Revision_Text table
-    supa_con.table('Revisions').update({"rt_unique_id": rt_unique_id}).eq("revision_guid", revision_guid).execute()
-
+        db_interface.upload_bill_text(bill_text, revision.revision_guid)
 
 if __name__ == "__main__":
-    supabase_connection: Client = create_client(sb_api_url, sb_api_key)
-    extract_and_upload_missing_bill_text(supabase_connection)
+    extract_and_upload_missing_bill_text(db_interface=SupabaseDBInterface())

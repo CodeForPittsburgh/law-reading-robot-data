@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 """
 A read-only object to represent Revisions
@@ -7,8 +8,8 @@ A read-only object to represent Revisions
 
 @dataclass
 class Revision:
-    printer_no: str
-    full_text_link: str
-    publication_date: str
     revision_guid: str
-    description: str
+    printer_no: Optional[str] = None
+    full_text_link: Optional[str] = None
+    publication_date: Optional[str] = None
+    description: Optional[str] = None
