@@ -5,9 +5,9 @@ from unittest import mock
 
 import feedparser
 
-import docx_etl
-import summarize_etl
-from db_interfaces.PostgresDBInterface import PostgresDBInterface
+import law_reader.docx_etl as docx_etl
+import law_reader.summarize_etl as summarize_etl
+from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
 from law_reader import SupabaseDBInterface, Extractor
 
 MOCK_RSS_FEED_DATA = {
@@ -49,9 +49,7 @@ class TestETLIntegration(unittest.TestCase):
         for table in tables:
             sql_script += f"TRUNCATE \"{table}\" CASCADE;"
         pg_interface.cursor.execute(sql_script)
-
-
-        pass
+        pg_interface.commit()
 
     # region Mocks
     @staticmethod
@@ -113,8 +111,8 @@ class TestETLIntegration(unittest.TestCase):
         )
         #endregion
         #region docx_etl
-        with mock.patch('docx_etl.convert_doc_to_docx', new=self.mock_convert_doc_to_docx), \
-                mock.patch('docx_etl.extract_law_text_from_docx', side_effect=self.side_effect_extract_law_text_from_docx()):
+        with mock.patch('law_reader.docx_etl.convert_doc_to_docx', new=self.mock_convert_doc_to_docx), \
+                mock.patch('law_reader.docx_etl.extract_law_text_from_docx', side_effect=self.side_effect_extract_law_text_from_docx()):
             docx_etl.extract_and_upload_missing_bill_text(self.db_interface)
 
         # Check that the correct number of revision texts were uploaded to the database
@@ -159,7 +157,7 @@ class TestETLIntegration(unittest.TestCase):
         )
         #endregion
         #region summary_etl
-        with mock.patch('summarize_etl.summarize_bill', new=self.mock_summarize_bill):
+        with mock.patch('law_reader.summarize_etl.summarize_bill', new=self.mock_summarize_bill):
             summarize_etl.summarize_all_unsummarized_revisions(self.db_interface)
 
         # Check that the correct number of summaries were inserted into the summaries table
