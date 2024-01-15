@@ -5,9 +5,9 @@ from unittest import mock
 
 import feedparser
 
-import docx_etl
-import summarize_etl
-from db_interfaces.PostgresDBInterface import PostgresDBInterface
+import law_reader.docx_etl as docx_etl
+import law_reader.summarize_etl as summarize_etl
+from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
 from law_reader import SupabaseDBInterface, Extractor
 
 MOCK_RSS_FEED_DATA = {

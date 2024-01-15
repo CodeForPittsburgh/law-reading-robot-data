@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from common.RevisionSummaryInfo import RevisionSummaryInfo
+from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 from law_reader import BillIdentifier, Revision
 
 

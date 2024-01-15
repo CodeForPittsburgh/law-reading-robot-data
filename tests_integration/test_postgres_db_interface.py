@@ -3,7 +3,7 @@ import unittest
 
 from dotenv import load_dotenv
 
-from db_interfaces.PostgresDBInterface import PostgresDBInterface
+from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
 from law_reader import BillIdentifier, Revision
 from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 

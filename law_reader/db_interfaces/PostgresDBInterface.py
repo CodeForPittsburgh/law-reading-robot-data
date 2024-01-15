@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from law_reader import BillIdentifier, Revision
 from law_reader.db_interfaces import DBInterface
-from summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
+from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
 
 
 class PostgresDBInterface(DBInterface):
