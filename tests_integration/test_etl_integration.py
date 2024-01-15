@@ -111,8 +111,8 @@ class TestETLIntegration(unittest.TestCase):
         )
         #endregion
         #region docx_etl
-        with mock.patch('docx_etl.convert_doc_to_docx', new=self.mock_convert_doc_to_docx), \
-                mock.patch('docx_etl.extract_law_text_from_docx', side_effect=self.side_effect_extract_law_text_from_docx()):
+        with mock.patch('law_reader.docx_etl.convert_doc_to_docx', new=self.mock_convert_doc_to_docx), \
+                mock.patch('law_reader.docx_etl.extract_law_text_from_docx', side_effect=self.side_effect_extract_law_text_from_docx()):
             docx_etl.extract_and_upload_missing_bill_text(self.db_interface)
 
         # Check that the correct number of revision texts were uploaded to the database
