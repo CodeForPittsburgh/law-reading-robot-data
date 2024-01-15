@@ -13,11 +13,7 @@ class TestPostgresDBInterface(unittest.TestCase):
         def setUp(self):
             load_dotenv()  # Load environment variables from .env file
             # Create a PostgresDBInterface object
-            self.db_interface = PostgresDBInterface(
-                db_password=os.environ.get("SUPABASE_DB_PASSWORD"),
-                db_host=os.environ.get("SUPABASE_DB_HOST"),
-                port=os.environ.get("SUPABASE_DB_PORT")
-            )
+            self.db_interface = PostgresDBInterface()
             # Truncate the tables in the database
             for table in ["Bills", "Revisions", "Revision_Text", "Summaries"]:
                 self.db_interface.execute("TRUNCATE TABLE \"{}\" CASCADE".format(table))
