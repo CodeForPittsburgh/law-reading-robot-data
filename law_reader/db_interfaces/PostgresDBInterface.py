@@ -1,7 +1,12 @@
-import psycopg2
+import os
 
-from law_reader import BillIdentifier, InvalidRTUniqueIDException, Revision
+import psycopg2
+from dotenv import load_dotenv
+
+from law_reader import BillIdentifier, Revision
 from law_reader.db_interfaces import DBInterface
+from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
+
 
 class PostgresDBInterface(DBInterface):
     """
@@ -9,15 +14,27 @@ class PostgresDBInterface(DBInterface):
     Utilizes psycopg2 library.
     """
 
-    def __init__(self, db_password, db_host, port):
+    def __init__(self):
         super().__init__()
-        self.connection = psycopg2.connect(
-            dbname="postgres",
-            user="postgres",
-            password=db_password,
-            host=db_host,
-            port=port
-        )
+        load_dotenv()  # Load environment variables from .env file
+
+        try:
+            # Attempt to establish a connection
+            self.connection = psycopg2.connect(
+                dbname="postgres",
+                user="postgres",
+                password=os.environ["SUPABASE_DB_PASSWORD"],
+                host=os.environ["SUPABASE_DB_HOST"],
+                port=os.environ["SUPABASE_DB_PORT"]
+            )
+        except KeyError as e:
+            # Handle missing environment variables
+            print(f"Environment variable not found: {e}")
+        except psycopg2.OperationalError as e:
+            # Handle database connection errors
+            print(f"Database connection failed: {e}")
+        else:
+            print("Database connection established successfully.")
         self.cursor = self.connection.cursor()
 
 
@@ -299,6 +316,25 @@ class PostgresDBInterface(DBInterface):
         )
 
 
+
+    #endregion
+
+    #region docx_etl
+    def get_revisions_without_bill_text(self) -> list[Revision]:
+        """
+        Gets the unique ids of all bills without bill text
+        :return: a list of unique ids of bills without bill text
+        """
+        pass
+
+    def upload_bill_text(self, full_text: str, revision_guid: str):
+        """
+        Uploads the law text from a .docx file to Supabase's "Revision_Text" table,
+        linking it to the appropriate entry in the "Revisions" table
+        :param full_text: full text of the bill revision
+        :param revision_guid: guid of the bill revision
+        """
+        pass
 
     #endregion
 

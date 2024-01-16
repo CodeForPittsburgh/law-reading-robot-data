@@ -4,8 +4,8 @@ from postgrest.types import CountMethod
 from supabase import Client, create_client
 from dotenv import load_dotenv
 
-from law_reader import BillIdentifier
-from law_reader.common import RevisionSummaryInfo
+from law_reader import BillIdentifier, Revision
+from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 from law_reader.db_interfaces.DBInterface import DBInterface
 from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
 
@@ -71,6 +71,7 @@ class SupabaseDBInterface(DBInterface):
 
     #endregion
 
+    #region summarize_etl
     def download_bill_text(self, revison_internal_id: str) -> str:
         """
         Downloads the full text of a bill from Supabase, using the rt_unique_id
@@ -93,7 +94,6 @@ class SupabaseDBInterface(DBInterface):
     def upload_summary(self, revision_info: RevisionSummaryInfo, summary_text: str):
         """
         Uploads a summary to Supabase, linking it to the appropriate entry in the "Revisions" table
-        :param supabase_connection: a Supabase connection object
         :param revision_info: a RevisionSummaryInfo object containing information about the revision
         :param summary_text: the text of the summary
         """
@@ -119,6 +119,7 @@ class SupabaseDBInterface(DBInterface):
             execute()
         return [RevisionSummaryInfo(revision["revision_guid"], revision["rt_unique_id"], revision["revision_internal_id"]) for revision in api_response.data]
 
+    #endregion
 
     #region rss_etl
     def create_and_attempt_to_insert_bill(self, bill_identifier: BillIdentifier) -> bool:
@@ -131,3 +132,34 @@ class SupabaseDBInterface(DBInterface):
         pass
 
     #endregion
+
+    # region docx_etl
+    def get_revisions_without_bill_text(self) -> list[Revision]:
+        """
+        Gets the unique ids of all bills without bill text
+        :return: a list of unique ids of bills without bill text
+        """
+        result = self.supabase_connection.table("Revisions").select("*").filter("rt_unique_id", "is", "null").execute()
+        results = []
+        for record in result.data:
+            r = Revision(
+                revision_guid=record["revision_guid"],
+                full_text_link=record["full_text_link"],
+            )
+            results.append(r)
+        return results
+
+    def upload_bill_text(self, full_text: str, revision_guid: str):
+        """
+        Uploads the law text from a .docx file to Supabase's "Revision_Text" table,
+        linking it to the appropriate entry in the "Revisions" table
+        :param full_text: full text of the bill revision
+        :param revision_guid: guid of the bill revision
+        """
+        # Insert full text as entry in Revision_Text table, retrieving the rt_unique_id of the new entry
+        response = self.supabase_connection.table('Revision_Text').insert({"full_text": full_text}).execute()
+        rt_unique_id = response.data[0]["rt_unique_id"]
+        # Update relevant entry in Revisions table (found with revision guid) with rt_unique_id of  new entry in Revision_Text table
+        self.supabase_connection.table('Revisions').update({"rt_unique_id": rt_unique_id}).eq("revision_guid", revision_guid).execute()
+
+    # endregion

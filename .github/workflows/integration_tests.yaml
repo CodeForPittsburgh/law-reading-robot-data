@@ -14,6 +14,9 @@ jobs:
       SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
       SUPABASE_DB_HOST: ${{ secrets.STAGING_DB_HOST }}
       SUPABASE_DB_PORT: ${{ secrets.STAGING_DB_PORT }}
+      SUPABASE_API_KEY: ${{ secrets.STAGING_API_KEY }}
+      SUPABASE_API_URL: ${{ secrets.STAGING_API_URL }}
+
 
     steps:
       - name: Check branch
@@ -39,5 +42,8 @@ jobs:
           python -m pip install gpt4all
           python -m pip install chromadb
           python -m pip install langchain
+          python -m pip install postgrest
+          python -m pip install requests
+          python -m pip install psycopg2
       - name: Run Tests
-        run: python -m unittest tests_integration
+        run: python -m unittest discover -s tests_integration
