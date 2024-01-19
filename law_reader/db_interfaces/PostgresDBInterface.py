@@ -43,14 +43,21 @@ class PostgresDBInterface(DBInterface):
         self.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
         return self.fetchall()
 
-    def select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
+    def simple_select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
         """
         Selects rows from the given table and returns them
+        This function only works for relatively simple select queries, and won't
+        work for more complex queries, such as those involving joins
         :param table: The name of the table to select from
         :param columns: A list of column names to select
         :param where_conditions: A dictionary defining the WHERE conditions (column: value)
         :return: The selected rows, as a list of dictionaries (column: value)
         """
+        # Throw error if comma is included in column name
+        for column in columns:
+            if "," in column:
+                raise ValueError("Commas are not allowed in column names")
+
         sql_script = f"SELECT "
         for column in columns:
             sql_script += f"{column}, "
@@ -60,7 +67,9 @@ class PostgresDBInterface(DBInterface):
             for column in where_conditions.keys():
                 sql_script += f"{column} = %s AND "
             sql_script = sql_script[:-5]
-        self.execute(sql_script, list(where_conditions.values()))
+            self.execute(sql_script, list(where_conditions.values()))
+        else:
+            self.execute(sql_script)
         result = self.fetchall()
         # Convert to list of dictionaries
         return [dict(zip(columns, row)) for row in result]
@@ -262,7 +271,7 @@ class PostgresDBInterface(DBInterface):
         self.execute("SELECT r.revision_guid FROM \"Revisions\" r "
                      "WHERE r.active_summary_id IS NULL")
         result = self.fetchall()
-        return [revision_guid for revision_guid in result]
+        return [row[0] for row in result]
 
     def add_revision(self, bill_identifier: BillIdentifier, revision: Revision):
         """
@@ -277,7 +286,7 @@ class PostgresDBInterface(DBInterface):
             return
 
         # Attempt to retrieve existing bill
-        select_results = self.select(
+        select_results = self.simple_select(
             table="Bills",
             columns=["bill_internal_id"],
             where_conditions={"legislative_id": bill_identifier.bill_guid}
@@ -325,7 +334,12 @@ class PostgresDBInterface(DBInterface):
         Gets the unique ids of all bills without bill text
         :return: a list of unique ids of bills without bill text
         """
-        pass
+        sql_query = ("SELECT revision_guid, full_text_link "
+                        "FROM \"Revisions\" "
+                        "WHERE rt_unique_id IS NULL")
+        self.execute(sql_query)
+        result = self.fetchall()
+        return [Revision(revision_guid=row[0], full_text_link=row[1]) for row in result]
 
     def upload_bill_text(self, full_text: str, revision_guid: str):
         """
@@ -334,7 +348,14 @@ class PostgresDBInterface(DBInterface):
         :param full_text: full text of the bill revision
         :param revision_guid: guid of the bill revision
         """
-        pass
+        self.insert_and_link(
+            row_to_insert={"full_text": full_text},
+            table_to_insert_into="Revision_Text",
+            column_to_return="rt_unique_id",
+            linking_table="Revisions",
+            linking_column_to_update="rt_unique_id",
+            linking_where={"revision_guid": revision_guid}
+        )
 
     #endregion
 
