@@ -18,6 +18,13 @@ class TestPostgresDBInterface(unittest.TestCase):
             for table in ["Bills", "Revisions", "Revision_Text", "Summaries"]:
                 self.db_interface.execute("TRUNCATE TABLE \"{}\" CASCADE".format(table))
 
+        def tearDown(self):
+            # Truncate the tables in the database
+            for table in ["Bills", "Revisions", "Revision_Text", "Summaries"]:
+                self.db_interface.execute("TRUNCATE TABLE \"{}\" CASCADE".format(table))
+            # Close the connection to the database
+            self.db_interface.close()
+
         def generate_fake_bill_and_revision(self):
             bill_identifier = BillIdentifier(
                 revision_guid="11110SB111P2222",
