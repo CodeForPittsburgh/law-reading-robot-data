@@ -20,7 +20,7 @@ class DBInterface(ABC):
 
     #endregion
     @abstractmethod
-    def select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
+    def simple_select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
         """
         Selects rows from the given table and returns them
         :param table: The name of the table to select from
