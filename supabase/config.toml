@@ -19,7 +19,7 @@ max_rows = 1000
 # Port to use for the local database URL.
 port = 54322
 # Port used by db diff command to initialise the shadow database.
-shadow_port = 54320
+shadow_port = 54319
 # The database major version to use. This has to be the same as your remote database's. Run `SHOW
 # server_version;` on the remote database to check.
 major_version = 15
