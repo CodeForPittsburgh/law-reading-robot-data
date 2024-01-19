@@ -2,6 +2,7 @@ from dataclasses import asdict
 import feedparser
 import os
 
+from db_interfaces.PostgresDBInterface import PostgresDBInterface
 from law_reader.db_interfaces import DBInterface, SupabaseDBInterface
 from law_reader.common import BillIdentifier, Bill, Revision, LegislativeChamber
 
@@ -101,7 +102,7 @@ class Extractor:
         """
         Creates a new bill record in the table "Bills" if it does not already exist.
         :param bill_identifier: The BillIdentifier object for the bill
-        :return: The bill_internal_id of the bill
+        :return: The bill_internal_id of the bill inserted, or the bill_internal_id of the bill already in the database
         """
         bills_output_record = self.create_bill_output_record(bill_identifier)
         if not self.db_interface.row_exists(
@@ -113,6 +114,7 @@ class Extractor:
                 row_column_dict=bills_output_record.output_dict,
                 return_column="bill_internal_id"
             )
+        return self.get_bill_internal_id(bill_identifier)
 
     def get_bill_internal_id(self, bill_identifier: BillIdentifier) -> str:
         """
@@ -120,7 +122,7 @@ class Extractor:
         :param bill_identifier: The BillIdentifier object for the bill
         :return: The bill_internal_id of the bill
         """
-        result = self.db_interface.select(
+        result = self.db_interface.simple_select(
             table="Bills",
             columns=["bill_internal_id"],
             where_conditions={"legislative_id": bill_identifier.bill_guid}
@@ -169,7 +171,7 @@ class Extractor:
 
 
 def extract_from_rss_feed(leg_bod: str, rss_feed: str):
-    db_interface = SupabaseDBInterface()
+    db_interface = PostgresDBInterface()
     extractor = Extractor(
         db_interface=db_interface,
         chamber=leg_bod,
