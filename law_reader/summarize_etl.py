@@ -2,7 +2,8 @@ from supabase import create_client, Client
 import os
 import argparse
 
-from law_reader.db_interfaces import SupabaseDBInterface, DBInterface
+from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
+from law_reader.db_interfaces import DBInterface
 from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
 from law_reader.summarizer.SummarizationException import SummarizationException
@@ -54,6 +55,6 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--debug', action='store_true', help='Print debug messages')
     # Parse the arguments
     args = parser.parse_args()
-    db_interface: DBInterface = SupabaseDBInterface(args.debug)
+    db_interface: DBInterface = PostgresDBInterface()
 
     summarize_all_unsummarized_revisions(db_interface)

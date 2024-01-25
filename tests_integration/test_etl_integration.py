@@ -54,6 +54,10 @@ class TestETLIntegration(unittest.TestCase):
         # Commit changes to the database so they can be inspected
         self.db_interface.commit()
 
+    def tearDown(self):
+        # Commit any uncommitted changes to the database
+        self.db_interface.commit()
+
     # region Mocks
     @staticmethod
     def mock_rss_feed_parse(url):
@@ -204,17 +208,16 @@ class TestETLIntegration(unittest.TestCase):
             "Not all summaries have unique summary texts"
         )
 
-        # Check that the correct number of revisions were updated in the revisions table
-        # TODO: Fix this so that it only pulls results which are not NULL
-        result = self.db_interface.simple_select(
-            table="Revisions",
-            columns=["active_summary_id"],
+        # Check that each summary references the correct revision
+        result = self.db_interface.select(
+            table="Summaries",
+            columns=["revision_internal_id"]
         )
-
+        revision_ids = [row["revision_internal_id"] for row in result]
         self.assertEqual(
-            len(result),
+            len(set(revision_ids)),
             3,
-            "The correct number of revisions were not updated in the revisions table"
+            "Not all summaries reference the correct revision"
         )
 
         #endregion
