@@ -2,7 +2,8 @@ from supabase import create_client, Client
 import os
 import argparse
 
-from law_reader.db_interfaces import SupabaseDBInterface, DBInterface
+from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
+from law_reader.db_interfaces import DBInterface
 from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
 from law_reader.summarizer.SummarizationException import SummarizationException
@@ -36,12 +37,12 @@ def summarize_all_unsummarized_revisions(db_interface: DBInterface):
     Any bills that cannot be summarized will be skipped
     :param db_interface: Interface to the database
     """
-    revisions_without_summaries: list[str] = db_interface.get_revisions_without_summaries()
-    for revision_guid in revisions_without_summaries:
+    revisions_without_summaries: list[RevisionSummaryInfo] = db_interface.get_revisions_without_summaries()
+    for revision in revisions_without_summaries:
         try:
-            full_text = db_interface.download_bill_text(str(revision_guid))
+            full_text = db_interface.download_bill_text(str(revision.rt_unique_id))
             summary_text = summarize_bill(full_text)
-            db_interface.upload_summary(revision_guid, summary_text)
+            db_interface.upload_summary(revision, summary_text)
         except SummarizationException:
             continue
         except InvalidRTUniqueIDException:
@@ -54,6 +55,6 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--debug', action='store_true', help='Print debug messages')
     # Parse the arguments
     args = parser.parse_args()
-    db_interface: DBInterface = SupabaseDBInterface(args.debug)
+    db_interface: DBInterface = PostgresDBInterface()
 
     summarize_all_unsummarized_revisions(db_interface)

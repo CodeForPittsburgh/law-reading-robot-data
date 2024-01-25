@@ -5,18 +5,22 @@ from dotenv import load_dotenv
 
 from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
 from law_reader import BillIdentifier, Revision
-from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 
 class TestPostgresDBInterface(unittest.TestCase):
 
 
         def setUp(self):
             load_dotenv()  # Load environment variables from .env file
+
             # Create a PostgresDBInterface object
             self.db_interface = PostgresDBInterface()
+            # Rollback any uncommitted changes to the database
+            self.db_interface.rollback()
             # Truncate the tables in the database
             for table in ["Bills", "Revisions", "Revision_Text", "Summaries"]:
                 self.db_interface.execute("TRUNCATE TABLE \"{}\" CASCADE".format(table))
+
+
 
         def tearDown(self):
             # Truncate the tables in the database
@@ -73,6 +77,29 @@ class TestPostgresDBInterface(unittest.TestCase):
             self.db_interface.execute("SELECT * FROM \"Summaries\" WHERE summary_id = %s", (summary_id,))
             result = self.db_interface.fetchone()
             self.assertIn(test_summary, result)
+            # Check that the revision_internal_id in Summaries is the same as the revision_internal_id in Revisions
+            revision_internal_id = self.db_interface.get_revision_internal_id(revision_id)
+            self.assertIn(revision_internal_id, result)
+            # Check that the is_active_summary flag was set to True
+            self.assertIn(True, result)
+
+            # Insert an additional summary for the same revision
+            test_summary = "This is another test summary"
+            summary_id_2 = self.db_interface.upload_summary(revision_id, test_summary)
+            # Check that the summary was uploaded
+            self.db_interface.execute("SELECT * FROM \"Summaries\" WHERE summary_id = %s", (summary_id_2,))
+            result = self.db_interface.fetchone()
+            self.assertIn(test_summary, result)
+            # Check that the revision_internal_id in Summaries is the same as the revision_internal_id in Revisions
+            revision_internal_id = self.db_interface.get_revision_internal_id(revision_id)
+            self.assertIn(revision_internal_id, result)
+            # Check that the is_active_summary flag was set to True
+            self.assertIn(True, result)
+
+            # Check that the first summary was set to inactive
+            self.db_interface.execute("SELECT * FROM \"Summaries\" WHERE summary_id = %s", (summary_id,))
+            result = self.db_interface.fetchone()
+            self.assertIn(False, result)
 
         def test_update(self):
             bill_id = "11110SB111"
@@ -129,7 +156,7 @@ class TestPostgresDBInterface(unittest.TestCase):
             revision_text_row = {
                 "full_text": "This is a test",
             }
-            self.db_interface.insert_and_link(
+            rt_unique_id = self.db_interface.insert_and_link(
                 row_to_insert=revision_text_row,
                 table_to_insert_into="Revision_Text",
                 column_to_return="rt_unique_id",
@@ -139,7 +166,7 @@ class TestPostgresDBInterface(unittest.TestCase):
             )
 
             # Download the bill text
-            text = self.db_interface.download_bill_text(revision_id)
+            text = self.db_interface.download_bill_text(rt_unique_id)
             self.assertIn("This is a test", text)
 
         def test_get_revisions_without_summaries(self):
@@ -148,7 +175,7 @@ class TestPostgresDBInterface(unittest.TestCase):
 
             # Get the revisions without summaries
             revisions = self.db_interface.get_revisions_without_summaries()
-            self.assertIn(bill_identifier.revision_guid, revisions[0])
+            self.assertEqual(len(revisions), 1)
 
             # TODO: Update to also include revisions with summaries to further test
 

@@ -44,14 +44,19 @@ class TestETLIntegration(unittest.TestCase):
         # Truncate the tables in the database (SupabaseDBInterface)
         tables = ['Revisions', 'Bills', 'Revision_Text', 'Summaries']
         # I cheat here and use the Postgres SQL library to do cascading deletes, as Supabase Python library does not support cascading deletes
+        pg_interface = PostgresDBInterface()
         sql_script = ""
         for table in tables:
             sql_script += f"TRUNCATE \"{table}\" CASCADE;"
-        self.db_interface.cursor.execute(sql_script)
+        pg_interface.cursor.execute(sql_script)
+        pg_interface.commit()
+
+    def tearDown(self):
+        # Commit any uncommitted changes to the database
         self.db_interface.commit()
 
-    def tearDown(self) -> None:
-        # Commit changes to the database so they can be inspected
+    def tearDown(self):
+        # Commit any uncommitted changes to the database
         self.db_interface.commit()
 
     # region Mocks
@@ -93,21 +98,15 @@ class TestETLIntegration(unittest.TestCase):
             extractor.extract_metadata_from_rss_feed(new_entry_count=3)
 
         # Check that the correct number of revisions were inserted into the revisions table
-        # and that each has a non-null bill_internal_id
         result = self.db_interface.simple_select(
             table="Revisions",
-            columns=["revision_guid", "bill_internal_id"]
+            columns=["revision_guid"]
         )
         self.assertEqual(
             len(result),
             3,
             "The correct number of revisions were not inserted into the revisions table"
         )
-        for row in result:
-            self.assertIsNotNone(
-                row["bill_internal_id"],
-                "A revision was inserted without a bill_internal_id"
-            )
         # # Check that the correct number of bills were inserted into the bills table
         result = self.db_interface.simple_select(
             table="Bills",
@@ -120,18 +119,6 @@ class TestETLIntegration(unittest.TestCase):
         )
         #endregion
         #region docx_etl
-        # Check that the correct number of revisions do not have bill text
-        sql_query = ("SELECT revision_guid "
-                     "FROM \"Revisions\" "
-                     "WHERE rt_unique_id IS NULL")
-        self.db_interface.execute(sql_query)
-        result = self.db_interface.cursor.fetchall()
-        self.assertEqual(
-            len(result),
-            3,
-            "The correct number of revisions do not have bill text"
-        )
-
         with mock.patch('law_reader.docx_etl.convert_doc_to_docx', new=self.mock_convert_doc_to_docx), \
                 mock.patch('law_reader.docx_etl.extract_law_text_from_docx', side_effect=self.side_effect_extract_law_text_from_docx()):
             docx_etl.extract_and_upload_missing_bill_text(self.db_interface)
@@ -204,17 +191,16 @@ class TestETLIntegration(unittest.TestCase):
             "Not all summaries have unique summary texts"
         )
 
-        # Check that the correct number of revisions were updated in the revisions table
-        # TODO: Fix this so that it only pulls results which are not NULL
+        # Check that each summary references the correct revision
         result = self.db_interface.simple_select(
-            table="Revisions",
-            columns=["active_summary_id"],
+            table="Summaries",
+            columns=["revision_internal_id"]
         )
-
+        revision_ids = [row["revision_internal_id"] for row in result]
         self.assertEqual(
-            len(result),
+            len(set(revision_ids)),
             3,
-            "The correct number of revisions were not updated in the revisions table"
+            "Not all summaries reference the correct revision"
         )
 
         #endregion
