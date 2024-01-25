@@ -98,7 +98,7 @@ class TestETLIntegration(unittest.TestCase):
             extractor.extract_metadata_from_rss_feed(new_entry_count=3)
 
         # Check that the correct number of revisions were inserted into the revisions table
-        result = self.db_interface.select(
+        result = self.db_interface.simple_select(
             table="Revisions",
             columns=["revision_guid"]
         )
@@ -108,7 +108,7 @@ class TestETLIntegration(unittest.TestCase):
             "The correct number of revisions were not inserted into the revisions table"
         )
         # # Check that the correct number of bills were inserted into the bills table
-        result = self.db_interface.select(
+        result = self.db_interface.simple_select(
             table="Bills",
             columns=["legislative_id"]
         )
@@ -124,7 +124,7 @@ class TestETLIntegration(unittest.TestCase):
             docx_etl.extract_and_upload_missing_bill_text(self.db_interface)
 
         # Check that the correct number of revision texts were uploaded to the database
-        result = self.db_interface.select(
+        result = self.db_interface.simple_select(
             table="Revision_Text",
             columns=["rt_unique_id"]
         )
@@ -143,7 +143,7 @@ class TestETLIntegration(unittest.TestCase):
 
 
         # Check that the correct number of revisions were updated in the revisions table
-        result = self.db_interface.select(
+        result = self.db_interface.simple_select(
             table="Revisions",
             columns=["rt_unique_id"]
         )
@@ -153,7 +153,7 @@ class TestETLIntegration(unittest.TestCase):
             "The correct number of revisions were not updated in the revisions table"
         )
         # Check that each revision has a unique revision text
-        result = self.db_interface.select(
+        result = self.db_interface.simple_select(
             table="Revision_Text",
             columns=["full_text"]
         )
@@ -169,7 +169,7 @@ class TestETLIntegration(unittest.TestCase):
             summarize_etl.summarize_all_unsummarized_revisions(self.db_interface)
 
         # Check that the correct number of summaries were inserted into the summaries table
-        result = self.db_interface.select(
+        result = self.db_interface.simple_select(
             table="Summaries",
             columns=["summary_id"]
         )
@@ -180,7 +180,7 @@ class TestETLIntegration(unittest.TestCase):
         )
 
         # Check that each summary has a unique summary text
-        result = self.db_interface.select(
+        result = self.db_interface.simple_select(
             table="Summaries",
             columns=["summary_text"]
         )
@@ -192,7 +192,7 @@ class TestETLIntegration(unittest.TestCase):
         )
 
         # Check that each summary references the correct revision
-        result = self.db_interface.select(
+        result = self.db_interface.simple_select(
             table="Summaries",
             columns=["revision_internal_id"]
         )
