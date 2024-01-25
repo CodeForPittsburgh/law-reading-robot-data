@@ -44,21 +44,14 @@ class PostgresDBInterface(DBInterface):
         self.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
         return self.fetchall()
 
-    def simple_select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
+    def select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
         """
         Selects rows from the given table and returns them
-        This function only works for relatively simple select queries, and won't
-        work for more complex queries, such as those involving joins
         :param table: The name of the table to select from
         :param columns: A list of column names to select
         :param where_conditions: A dictionary defining the WHERE conditions (column: value)
         :return: The selected rows, as a list of dictionaries (column: value)
         """
-        # Throw error if comma is included in column name
-        for column in columns:
-            if "," in column:
-                raise ValueError("Commas are not allowed in column names")
-
         sql_script = f"SELECT "
         for column in columns:
             sql_script += f"{column}, "
@@ -260,7 +253,6 @@ class PostgresDBInterface(DBInterface):
                         f"WHERE revision_internal_id = {revision_internal_id}; "
         # Execute script
         self.execute(sql_script)
-
         # Insert the new summary
         sql_script = f"INSERT INTO public.\"Summaries\" (revision_internal_id, summary_text, is_active_summary) "\
                         f"VALUES ({revision_internal_id}, '{summary_text}', true)" \
@@ -317,7 +309,7 @@ class PostgresDBInterface(DBInterface):
             return
 
         # Attempt to retrieve existing bill
-        select_results = self.simple_select(
+        select_results = self.select(
             table="Bills",
             columns=["bill_internal_id"],
             where_conditions={"legislative_id": bill_identifier.bill_guid}
@@ -365,7 +357,6 @@ class PostgresDBInterface(DBInterface):
         Gets the unique ids of all revisions without bill text
         :return: a list of Revision objects of bills without bill text, containing the revision_guid and full_text_link
         """
-
         # Bill texts are stored in the Revision_Text table.
         # Revisions without text will not have an entry in this table.
         # Thus, must find revisions without an entry in the Revision_Text table.
