@@ -63,7 +63,13 @@ class DBInterface(ABC):
         """
         pass
 
-
+    def get_revision_internal_id(self, revision_guid: str) -> str:
+        """
+        Gets the revision_internal_id of a bill from the database
+        :param revision_guid: the unique id of the bill
+        :return: the revision_internal_id of the bill
+        """
+        pass
 
     @abstractmethod
     def create_and_attempt_to_insert_revision(self, revision_rss_feed_entry, bill_identifier: BillIdentifier) -> bool:
