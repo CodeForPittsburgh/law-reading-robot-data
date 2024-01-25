@@ -121,7 +121,7 @@ class DBInterface(ABC):
     def get_revisions_without_bill_text(self) -> list[Revision]:
         """
         Gets the unique ids of all bills without bill text
-        :return: a list of unique ids of bills without bill text
+        :return: a list of Revision objects of bills without bill text
         """
         pass
 
