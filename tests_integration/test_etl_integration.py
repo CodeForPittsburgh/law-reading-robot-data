@@ -55,6 +55,10 @@ class TestETLIntegration(unittest.TestCase):
         # Commit any uncommitted changes to the database
         self.db_interface.commit()
 
+    def tearDown(self):
+        # Commit any uncommitted changes to the database
+        self.db_interface.commit()
+
     # region Mocks
     @staticmethod
     def mock_rss_feed_parse(url):

@@ -253,7 +253,6 @@ class PostgresDBInterface(DBInterface):
                         f"WHERE revision_internal_id = {revision_internal_id}; "
         # Execute script
         self.execute(sql_script)
-
         # Insert the new summary
         sql_script = f"INSERT INTO public.\"Summaries\" (revision_internal_id, summary_text, is_active_summary) "\
                         f"VALUES ({revision_internal_id}, '{summary_text}', true)" \
@@ -295,6 +294,7 @@ class PostgresDBInterface(DBInterface):
         elif len(result) > 1:
             raise InvalidRTUniqueIDException(f"Found multiple bills with revision_guid {revision_guid}")
         return result[0][0]
+
 
     def add_revision(self, bill_identifier: BillIdentifier, revision: Revision):
         """
@@ -369,7 +369,6 @@ class PostgresDBInterface(DBInterface):
         return [Revision(revision_guid=row[0], full_text_link=row[1]) for row in result]
 
 
-
     def upload_bill_text(self, full_text: str, revision_guid: str):
         """
         Uploads the law text from a .docx file to Supabase's "Revision_Text" table,
@@ -377,7 +376,6 @@ class PostgresDBInterface(DBInterface):
         :param full_text: full text of the bill revision
         :param revision_guid: guid of the bill revision
         """
-
         # Insert full text into Revisions_Text table, then get rt_unique_id of the new entry
         rt_unique_id = self.insert(
             table="Revision_Text",
