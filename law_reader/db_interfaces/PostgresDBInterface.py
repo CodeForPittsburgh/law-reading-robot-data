@@ -60,7 +60,9 @@ class PostgresDBInterface(DBInterface):
             for column in where_conditions.keys():
                 sql_script += f"{column} = %s AND "
             sql_script = sql_script[:-5]
-        self.execute(sql_script, list(where_conditions.values()))
+            self.execute(sql_script, list(where_conditions.values()))
+        else:
+            self.execute(sql_script)
         result = self.fetchall()
         # Convert to list of dictionaries
         return [dict(zip(columns, row)) for row in result]
