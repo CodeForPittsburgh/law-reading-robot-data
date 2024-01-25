@@ -37,12 +37,12 @@ def summarize_all_unsummarized_revisions(db_interface: DBInterface):
     Any bills that cannot be summarized will be skipped
     :param db_interface: Interface to the database
     """
-    revisions_without_summaries: list[str] = db_interface.get_revisions_without_summaries()
-    for revision_guid in revisions_without_summaries:
+    revisions_without_summaries: list[RevisionSummaryInfo] = db_interface.get_revisions_without_summaries()
+    for revision in revisions_without_summaries:
         try:
-            full_text = db_interface.download_bill_text(str(revision_guid))
+            full_text = db_interface.download_bill_text(str(revision.rt_unique_id))
             summary_text = summarize_bill(full_text)
-            db_interface.upload_summary(revision_guid, summary_text)
+            db_interface.upload_summary(revision, summary_text)
         except SummarizationException:
             continue
         except InvalidRTUniqueIDException:

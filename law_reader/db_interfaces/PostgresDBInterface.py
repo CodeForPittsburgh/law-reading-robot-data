@@ -44,7 +44,7 @@ class PostgresDBInterface(DBInterface):
         self.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
         return self.fetchall()
 
-    def select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
+    def simple_select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
         """
         Selects rows from the given table and returns them
         :param table: The name of the table to select from
@@ -309,7 +309,7 @@ class PostgresDBInterface(DBInterface):
             return
 
         # Attempt to retrieve existing bill
-        select_results = self.select(
+        select_results = self.simple_select(
             table="Bills",
             columns=["bill_internal_id"],
             where_conditions={"legislative_id": bill_identifier.bill_guid}
