@@ -40,7 +40,7 @@ MOCK_RSS_FEED_DATA = {
 class TestETLIntegration(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.db_interface = SupabaseDBInterface()
+        self.db_interface = PostgresDBInterface()
         # Truncate the tables in the database (SupabaseDBInterface)
         tables = ['Revisions', 'Bills', 'Revision_Text', 'Summaries']
         # I cheat here and use the Postgres SQL library to do cascading deletes, as Supabase Python library does not support cascading deletes
@@ -50,6 +50,10 @@ class TestETLIntegration(unittest.TestCase):
             sql_script += f"TRUNCATE \"{table}\" CASCADE;"
         pg_interface.cursor.execute(sql_script)
         pg_interface.commit()
+
+    def tearDown(self):
+        # Commit any uncommitted changes to the database
+        self.db_interface.commit()
 
     # region Mocks
     @staticmethod
@@ -183,17 +187,16 @@ class TestETLIntegration(unittest.TestCase):
             "Not all summaries have unique summary texts"
         )
 
-        # Check that the correct number of revisions were updated in the revisions table
-        # TODO: Fix this so that it only pulls results which are not NULL
+        # Check that each summary references the correct revision
         result = self.db_interface.select(
-            table="Revisions",
-            columns=["active_summary_id"],
+            table="Summaries",
+            columns=["revision_internal_id"]
         )
-
+        revision_ids = [row["revision_internal_id"] for row in result]
         self.assertEqual(
-            len(result),
+            len(set(revision_ids)),
             3,
-            "The correct number of revisions were not updated in the revisions table"
+            "Not all summaries reference the correct revision"
         )
 
         #endregion

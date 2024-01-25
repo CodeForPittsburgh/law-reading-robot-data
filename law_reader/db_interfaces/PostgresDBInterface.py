@@ -3,6 +3,7 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 
+from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 from law_reader import BillIdentifier, Revision
 from law_reader.db_interfaces import DBInterface
 from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
@@ -216,7 +217,7 @@ class PostgresDBInterface(DBInterface):
     def create_and_attempt_to_insert_bill(self, bill_identifier: BillIdentifier) -> bool:
         pass
 
-    def download_bill_text(self, revision_guid: str) -> str:
+    def download_bill_text(self, rt_unique_id: str) -> str:
         """
         Downloads the full text of a bill from the database, using the rt_unique_id
         Raises an InvalidRTUniqueIDException if the bill cannot be found
@@ -224,19 +225,16 @@ class PostgresDBInterface(DBInterface):
         :param rt_unique_id: the unique id of the bill in the Revision_Text table
         :return: the full text of the bill
         """
-        sql_script = (f"SELECT rt.full_text "
-                      f"FROM \"Revision_Text\" rt, \"Revisions\" r "
-                      f" WHERE r.revision_guid = '{revision_guid}'"
-                      f" AND r.rt_unique_id = rt.rt_unique_id")
+        sql_script = f"SELECT full_text FROM \"Revision_Text\" WHERE rt_unique_id = '{rt_unique_id}'"
         self.execute(sql_script)
-        result = self.fetchall()
-        if result is None:
-            raise InvalidRTUniqueIDException(f"Could not find bill with revision_guid {revision_guid}")
+        result: list[tuple] = self.fetchall()
+        if len(result) < 1:
+            raise InvalidRTUniqueIDException(f"Could not find bill with rt_unique_id {rt_unique_id}")
         elif len(result) > 1:
-            raise InvalidRTUniqueIDException(f"Found multiple bills with revision_guid {revision_guid}")
+            raise InvalidRTUniqueIDException(f"Found multiple bills with rt_unique_id {rt_unique_id}")
         text = result[0][0]
         if text is None or text == "":
-            raise InvalidRTUniqueIDException(f"Bill with revision_guid {revision_guid} has no text")
+            raise InvalidRTUniqueIDException(f"Bill with rt_unique_id {rt_unique_id} has no text")
         return text
 
     def upload_summary(self, revision_guid: str, summary_text: str):
@@ -246,25 +244,57 @@ class PostgresDBInterface(DBInterface):
         :param summary_text: the text of the summary
         :return: The id of the inserted row, or None if the insert failed
         """
-        # Insert summary
-        return self.insert_and_link(
-            row_to_insert={"summary_text": summary_text},
-            table_to_insert_into="Summaries",
-            column_to_return="summary_id",
-            linking_table="Revisions",
-            linking_column_to_update="active_summary_id",
-            linking_where={"revision_guid": revision_guid}
-        )
+        # Get revision internal id
+        revision_internal_id = self.get_revision_internal_id(revision_guid)
 
-    def get_revisions_without_summaries(self) -> list[str]:
+        # Set all existing summaries for the revision to inactive
+        sql_script = f"UPDATE public.\"Summaries\" "\
+                        f"SET is_active_summary = false "\
+                        f"WHERE revision_internal_id = {revision_internal_id}; "
+        # Execute script
+        self.execute(sql_script)
+
+        # Insert the new summary
+        sql_script = f"INSERT INTO public.\"Summaries\" (revision_internal_id, summary_text, is_active_summary) "\
+                        f"VALUES ({revision_internal_id}, '{summary_text}', true)" \
+                        f"RETURNING summary_id "
+        # Execute script
+        self.execute(sql_script)
+        summary_id = self.fetchone()[0]
+
+        self.commit()
+        # Return id of inserted row
+        return summary_id
+
+    def get_revisions_without_summaries(self) -> list[RevisionSummaryInfo]:
         """
         Gets the unique ids of all bills without summaries
         :return: A list of RevisionSummaryInfo objects for the bills without summaries
         """
-        self.execute("SELECT r.revision_guid FROM \"Revisions\" r "
-                     "WHERE r.active_summary_id IS NULL")
+        sql_script = (f"SELECT r.revision_guid, r.rt_unique_id, r.revision_internal_id "
+                      f"FROM \"Revisions\" r "
+                      f"LEFT JOIN public.\"Summaries\" s "
+                      f"ON r.revision_internal_id = s.revision_internal_id "
+                      f"WHERE s.is_active_summary = false "
+                      f"OR s.is_active_summary IS NULL")
+        self.execute(sql_script)
         result = self.fetchall()
-        return [revision_guid for revision_guid in result]
+        return [RevisionSummaryInfo(revision_guid=row[0], rt_unique_id=row[1], revision_internal_id=row[2]) for row in result]
+
+    def get_revision_internal_id(self, revision_guid: str) -> str:
+        """
+        Gets the revision_internal_id of a bill from the database
+        :param revision_guid: the unique id of the bill
+        :return: the revision_internal_id of the bill
+        """
+        sql_script = f"SELECT revision_internal_id FROM \"Revisions\" WHERE revision_guid = '{revision_guid}'"
+        self.execute(sql_script)
+        result = self.fetchall()
+        if result is None:
+            raise InvalidRTUniqueIDException(f"Could not find bill with revision_guid {revision_guid}")
+        elif len(result) > 1:
+            raise InvalidRTUniqueIDException(f"Found multiple bills with revision_guid {revision_guid}")
+        return result[0][0]
 
     def add_revision(self, bill_identifier: BillIdentifier, revision: Revision):
         """
@@ -324,10 +354,21 @@ class PostgresDBInterface(DBInterface):
     #region docx_etl
     def get_revisions_without_bill_text(self) -> list[Revision]:
         """
-        Gets the unique ids of all bills without bill text
-        :return: a list of unique ids of bills without bill text
+        Gets the unique ids of all revisions without bill text
+        :return: a list of Revision objects of bills without bill text, containing the revision_guid and full_text_link
         """
-        pass
+        # Bill texts are stored in the Revision_Text table.
+        # Revisions without text will not have an entry in this table.
+        # Thus, must find revisions without an entry in the Revision_Text table.
+        result = self.execute("SELECT revision_guid, full_text_link "
+                              "FROM \"Revisions\" "
+                              "LEFT JOIN public.\"Revision_Text\" "
+                              "ON \"Revisions\".rt_unique_id = \"Revision_Text\".rt_unique_id "
+                              "WHERE \"Revision_Text\".rt_unique_id IS NULL;")
+        result = self.fetchall()
+        return [Revision(revision_guid=row[0], full_text_link=row[1]) for row in result]
+
+
 
     def upload_bill_text(self, full_text: str, revision_guid: str):
         """
@@ -336,7 +377,26 @@ class PostgresDBInterface(DBInterface):
         :param full_text: full text of the bill revision
         :param revision_guid: guid of the bill revision
         """
-        pass
+
+        # Insert full text into Revisions_Text table, then get rt_unique_id of the new entry
+        rt_unique_id = self.insert(
+            table="Revision_Text",
+            row_column_dict={
+                "full_text": full_text
+            },
+            return_column="rt_unique_id"
+        )
+        # Update relevant entry in Revisions table (found with revision guid) with rt_unique_id of  new entry in Revision_Text table
+        self.update(
+            table="Revisions",
+            row_column_dict={
+                "rt_unique_id": rt_unique_id
+            },
+            where_conditions={
+                "revision_guid": revision_guid
+            }
+        )
+
 
     #endregion
 
