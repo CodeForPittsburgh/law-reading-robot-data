@@ -44,14 +44,21 @@ class PostgresDBInterface(DBInterface):
         self.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
         return self.fetchall()
 
-    def select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
+    def simple_select(self, table, columns: list[str], where_conditions: dict = None) -> list[dict[str, any]]:
         """
         Selects rows from the given table and returns them
+        This function only works for relatively simple select queries, and won't
+        work for more complex queries, such as those involving joins
         :param table: The name of the table to select from
         :param columns: A list of column names to select
         :param where_conditions: A dictionary defining the WHERE conditions (column: value)
         :return: The selected rows, as a list of dictionaries (column: value)
         """
+        # Throw error if comma is included in column name
+        for column in columns:
+            if "," in column:
+                raise ValueError("Commas are not allowed in column names")
+
         sql_script = f"SELECT "
         for column in columns:
             sql_script += f"{column}, "
@@ -296,6 +303,7 @@ class PostgresDBInterface(DBInterface):
             raise InvalidRTUniqueIDException(f"Found multiple bills with revision_guid {revision_guid}")
         return result[0][0]
 
+
     def add_revision(self, bill_identifier: BillIdentifier, revision: Revision):
         """
         Adds a revision to the database if it does not already exist.
@@ -309,7 +317,7 @@ class PostgresDBInterface(DBInterface):
             return
 
         # Attempt to retrieve existing bill
-        select_results = self.select(
+        select_results = self.simple_select(
             table="Bills",
             columns=["bill_internal_id"],
             where_conditions={"legislative_id": bill_identifier.bill_guid}
@@ -357,6 +365,7 @@ class PostgresDBInterface(DBInterface):
         Gets the unique ids of all revisions without bill text
         :return: a list of Revision objects of bills without bill text, containing the revision_guid and full_text_link
         """
+
         # Bill texts are stored in the Revision_Text table.
         # Revisions without text will not have an entry in this table.
         # Thus, must find revisions without an entry in the Revision_Text table.
@@ -369,7 +378,6 @@ class PostgresDBInterface(DBInterface):
         return [Revision(revision_guid=row[0], full_text_link=row[1]) for row in result]
 
 
-
     def upload_bill_text(self, full_text: str, revision_guid: str):
         """
         Uploads the law text from a .docx file to Supabase's "Revision_Text" table,
@@ -377,7 +385,6 @@ class PostgresDBInterface(DBInterface):
         :param full_text: full text of the bill revision
         :param revision_guid: guid of the bill revision
         """
-
         # Insert full text into Revisions_Text table, then get rt_unique_id of the new entry
         rt_unique_id = self.insert(
             table="Revision_Text",
