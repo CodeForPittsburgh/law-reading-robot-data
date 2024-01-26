@@ -8,7 +8,7 @@ import feedparser
 import law_reader.docx_etl as docx_etl
 import law_reader.summarize_etl as summarize_etl
 from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
-from law_reader import SupabaseDBInterface, Extractor
+from law_reader import Extractor
 
 MOCK_RSS_FEED_DATA = {
     "entries": [
@@ -50,10 +50,6 @@ class TestETLIntegration(unittest.TestCase):
             sql_script += f"TRUNCATE \"{table}\" CASCADE;"
         pg_interface.cursor.execute(sql_script)
         pg_interface.commit()
-
-    def tearDown(self):
-        # Commit any uncommitted changes to the database
-        self.db_interface.commit()
 
     def tearDown(self):
         # Commit any uncommitted changes to the database
