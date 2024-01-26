@@ -23,7 +23,7 @@ class PostgresDBInterface(DBInterface):
             # Attempt to establish a connection
             self.connection = psycopg2.connect(
                 dbname="postgres",
-                user="postgres",
+                user=os.environ["SUPABASE_DB_USER"],
                 password=os.environ["SUPABASE_DB_PASSWORD"],
                 host=os.environ["SUPABASE_DB_HOST"],
                 port=os.environ["SUPABASE_DB_PORT"]
