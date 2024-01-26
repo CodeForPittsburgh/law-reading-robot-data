@@ -1,12 +1,12 @@
 from typing import Optional
 
 from docx import Document
-from supabase import create_client, Client
 import os
 import subprocess
 import requests
 
-from law_reader import DBInterface, SupabaseDBInterface
+from law_reader import DBInterface
+from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
 
 
 def make_temp_if_not_exists():
@@ -85,4 +85,4 @@ def extract_and_upload_missing_bill_text(db_interface: DBInterface):
         db_interface.upload_bill_text(bill_text, revision.revision_guid)
 
 if __name__ == "__main__":
-    extract_and_upload_missing_bill_text(db_interface=SupabaseDBInterface())
+    extract_and_upload_missing_bill_text(db_interface=PostgresDBInterface())
