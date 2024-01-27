@@ -175,6 +175,7 @@ def extract_from_rss_feed(leg_bod: str, rss_feed: str):
         chamber=leg_bod,
         rss_feed=rss_feed)
     extractor.extract_metadata_from_rss_feed()
+    db_interface.commit()
 
 
 if __name__ == "__main__":
