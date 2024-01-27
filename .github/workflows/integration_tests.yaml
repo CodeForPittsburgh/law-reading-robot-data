@@ -34,6 +34,7 @@ jobs:
       SUPABASE_DB_PORT: ${{ secrets.STAGING_DB_PORT }}
       SUPABASE_API_KEY: ${{ secrets.STAGING_API_KEY }}
       SUPABASE_API_URL: ${{ secrets.STAGING_API_URL }}
+      SUPABASE_DB_USER: ${{ secrets.STAGING_DB_USER }}
 
 
     steps:
