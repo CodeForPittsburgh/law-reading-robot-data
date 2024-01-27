@@ -7,9 +7,9 @@ env:
   SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
   SUPABASE_API_URL: ${{ secrets.SUPABASE_API_URL }}
   SUPABASE_DB_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
-  SUPABASE_DB_USER: ${{ secrets.PROD_DB_USER }}
   SUPABASE_DB_HOST: ${{ secrets.PROD_DB_HOST }}
   SUPABASE_DB_PORT: ${{ secrets.PROD_DB_PORT }}
+  SUPABASE_DB_USER: ${{ secrets.PROD_DB_USER }}
 
 jobs:
   rss-etl:
@@ -29,6 +29,7 @@ jobs:
           python -m pip install supabase
           python -m pip install python-dotenv
           python -m pip install feedparser
+          python -m pip install psycopg2
       - name: Run RSS extraction script
         run: python law_reader/rss_etl.py
   docx-etl:
@@ -47,6 +48,7 @@ jobs:
           python -m pip install supabase
           python -m pip install python-dotenv
           python -m pip install requests
+          python -m pip install psycopg2
       - name: Install Libreoffice for doc to docx conversion
         run: |
           sudo apt-get update

@@ -31,6 +31,7 @@ jobs:
           python -m pip install gpt4all
           python -m pip install chromadb
           python -m pip install feedparser
+          python -m pip install psycopg2
           # Add other packages as needed
       - name: Run Summarize ETL script
         run: |

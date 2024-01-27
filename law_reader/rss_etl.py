@@ -1,8 +1,7 @@
 from dataclasses import asdict
 import feedparser
-import os
 
-from law_reader.db_interfaces import DBInterface, SupabaseDBInterface, PostgresDBInterface
+from law_reader.db_interfaces import DBInterface, PostgresDBInterface
 from law_reader.common import BillIdentifier, Bill, Revision, LegislativeChamber
 
 """

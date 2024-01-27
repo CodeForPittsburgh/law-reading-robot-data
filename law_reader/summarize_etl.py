@@ -1,5 +1,3 @@
-from supabase import create_client, Client
-import os
 import argparse
 
 from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
