@@ -43,7 +43,7 @@ def convert_doc_to_docx(bill_path: str) -> str:
     """
     print("Attempting to convert file to docx...")
     try:
-        subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx', bill_path, '--outdir', "temp"])
+        subprocess.call(['libreoffice', '--headless', '--convert-to', 'docx:MS Word 2007 XML', bill_path, '--outdir', "temp"])
         print("Conversion successful.")
         return bill_path.replace(".doc", ".docx")
     except FileNotFoundError:
