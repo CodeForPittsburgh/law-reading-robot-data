@@ -34,8 +34,9 @@ jobs:
       env:
         PRODUCTION_DB_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
         PRODUCTION_DB_URL: ${{ secrets.PRODUCTION_DB_URL }}
+        PRODUCTION_DB_USER: ${{ secrets.PROD_DB_USER }}
       run: |
-        /usr/lib/postgresql/15/bin/pg_dump "postgres://postgres:${PRODUCTION_DB_PASSWORD}@${PRODUCTION_DB_URL}/postgres" \
+        /usr/lib/postgresql/15/bin/pg_dump "postgres://${PRODUCTION_DB_USER}:${PRODUCTION_DB_PASSWORD}@${PRODUCTION_DB_URL}/postgres" \
           --quote-all-identifiers \
           --exclude-table-data 'storage.objects' \
           --exclude-schema 'extensions|graphql|graphql_public|net|tiger|pgbouncer|vault|_realtime|supabase_functions|storage|pg*|schema_migrations|information_schema' \

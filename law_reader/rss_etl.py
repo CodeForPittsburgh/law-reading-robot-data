@@ -170,12 +170,13 @@ class Extractor:
 
 
 def extract_from_rss_feed(leg_bod: str, rss_feed: str):
-    db_interface = PostgresDBInterface()
+    db_interface = PostgresDBInterface.PostgresDBInterface()
     extractor = Extractor(
         db_interface=db_interface,
         chamber=leg_bod,
         rss_feed=rss_feed)
     extractor.extract_metadata_from_rss_feed()
+    db_interface.commit()
 
 
 if __name__ == "__main__":
