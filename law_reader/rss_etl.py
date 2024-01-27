@@ -1,8 +1,7 @@
 from dataclasses import asdict
 import feedparser
-import os
 
-from law_reader.db_interfaces import DBInterface, SupabaseDBInterface, PostgresDBInterface
+from law_reader.db_interfaces import DBInterface, PostgresDBInterface
 from law_reader.common import BillIdentifier, Bill, Revision, LegislativeChamber
 
 """
@@ -170,7 +169,7 @@ class Extractor:
 
 
 def extract_from_rss_feed(leg_bod: str, rss_feed: str):
-    db_interface = PostgresDBInterface()
+    db_interface = PostgresDBInterface.PostgresDBInterface()
     extractor = Extractor(
         db_interface=db_interface,
         chamber=leg_bod,
