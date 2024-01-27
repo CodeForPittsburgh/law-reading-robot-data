@@ -54,4 +54,4 @@ jobs:
           sudo apt-get update
           sudo apt install libreoffice
       - name: Run DOCX Text extraction script
-        run: python law_reader/docx-etl.py
+        run: python law_reader/docx_etl.py
