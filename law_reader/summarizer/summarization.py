@@ -8,6 +8,7 @@ This module provides a class for generating summaries of text using OpenAI's GPT
 
 import os
 
+from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain.text_splitter import CharacterTextSplitter
@@ -26,6 +27,7 @@ class Summarization(Summarizer):
 
     def __init__(self, llm=None):
         super().__init__(llm)
+        load_dotenv()  # Load environment variables from .env file
         api_key = os.environ['OPENAI_API_KEY']
 
         if not api_key:
