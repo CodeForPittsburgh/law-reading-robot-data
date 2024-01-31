@@ -255,10 +255,10 @@ class PostgresDBInterface(DBInterface):
         self.execute(sql_script)
         # Insert the new summary
         sql_script = f"INSERT INTO public.\"Summaries\" (revision_internal_id, summary_text, is_active_summary) "\
-                        f"VALUES ({revision_internal_id}, '{summary_text}', true)" \
+                        f"VALUES ({revision_internal_id}, %s, true)" \
                         f"RETURNING summary_id "
         # Execute script
-        self.execute(sql_script)
+        self.execute(sql_script, (summary_text,))
         summary_id = self.fetchone()[0]
 
         self.commit()

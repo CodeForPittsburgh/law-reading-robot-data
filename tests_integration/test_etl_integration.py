@@ -83,7 +83,7 @@ class TestETLIntegration(unittest.TestCase):
 
     @staticmethod
     def mock_summarize_bill(bill_text: str) -> str:
-        return f"Summary text: {bill_text}"
+        return f"Text's summary: {bill_text}"
 
     # endregion
     def test_end_to_end_workflow(self):
