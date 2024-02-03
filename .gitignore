@@ -121,6 +121,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
 .venv
 env/
 venv/
@@ -179,3 +180,6 @@ __pycache__/
 
 # Temporary directory
 .temp/
+/.env.production
+/.env.stage
+/.env.development

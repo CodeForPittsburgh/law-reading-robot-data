@@ -1,3 +1,4 @@
+import argparse
 from typing import Optional
 
 from docx import Document
@@ -7,6 +8,7 @@ import requests
 
 from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
 from law_reader import DBInterface
+from util.load_environment import load_environment
 
 
 def make_temp_if_not_exists():
@@ -86,4 +88,11 @@ def extract_and_upload_missing_bill_text(db_interface: DBInterface):
     db_interface.commit()
 
 if __name__ == "__main__":
+    # Parse the arguments
+    parser = argparse.ArgumentParser(description="Extract and upload missing bill text from Database")
+    # Add a string argument for the environment, with a default value of an empty string
+    parser.add_argument('-e', '--environment', type=str, default='', help='The environment to run the script in')
+    # Load the environment variables
+    load_environment(parser.parse_args().environment)
+
     extract_and_upload_missing_bill_text(db_interface=PostgresDBInterface())

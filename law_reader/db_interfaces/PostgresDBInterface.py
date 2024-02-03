@@ -1,7 +1,6 @@
 import os
 
 import psycopg2
-from dotenv import load_dotenv
 
 from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 from law_reader import BillIdentifier, Revision
@@ -17,7 +16,6 @@ class PostgresDBInterface(DBInterface):
 
     def __init__(self):
         super().__init__()
-        load_dotenv()  # Load environment variables from .env file
 
         try:
             # Attempt to establish a connection

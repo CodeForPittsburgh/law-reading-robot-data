@@ -1,8 +1,10 @@
+import argparse
 from dataclasses import asdict
 import feedparser
 
 from law_reader.db_interfaces import DBInterface, PostgresDBInterface
 from law_reader.common import BillIdentifier, Bill, Revision, LegislativeChamber
+from util.load_environment import load_environment
 
 """
 File for extracting data from the RSS feeds of the PA Senate and House of Representatives
@@ -179,5 +181,12 @@ def extract_from_rss_feed(leg_bod: str, rss_feed: str):
 
 
 if __name__ == "__main__":
+    # Parse the arguments
+    parser = argparse.ArgumentParser(description="Extract bills from RSS feeds")
+    # Add a string argument for the environment, with a default value of an empty string
+    parser.add_argument('-e', '--environment', type=str, default='', help='The environment to run the script in')
+    # Load the environment variables
+    load_environment(parser.parse_args().environment)
+
     extract_from_rss_feed(LegislativeChamber.SENATE.value, senate_rss_feed)
     extract_from_rss_feed(LegislativeChamber.HOUSE.value, house_rss_feed)

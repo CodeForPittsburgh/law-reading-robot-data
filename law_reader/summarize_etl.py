@@ -6,6 +6,7 @@ from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
 from law_reader.summarizer.InvalidRTUniqueIDException import InvalidRTUniqueIDException
 from law_reader.summarizer.SummarizationException import SummarizationException
 from law_reader.summarizer.summarization import Summarization
+from util.load_environment import load_environment
 
 """
 File for downloading full text of bills from Supabase, summarizing them, and uploading the summaries to Supabase
@@ -51,6 +52,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Summarize bills from Database")
     # Add a boolean argument for the debug flag
     parser.add_argument('-d', '--debug', action='store_true', help='Print debug messages')
+    # Add a string argument for the environment, with a default value of an empty string
+    parser.add_argument('-e', '--environment', type=str, default='', help='The environment to run the script in')
+    # Load the environment variables
+    load_environment(parser.parse_args().environment)
+
     # Parse the arguments
     args = parser.parse_args()
     db_interface: DBInterface = PostgresDBInterface()
