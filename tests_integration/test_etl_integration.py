@@ -9,6 +9,7 @@ import law_reader.docx_etl as docx_etl
 import law_reader.summarize_etl as summarize_etl
 from law_reader.db_interfaces.PostgresDBInterface import PostgresDBInterface
 from law_reader import Extractor
+from util.load_environment import load_environment
 
 MOCK_RSS_FEED_DATA = {
     "entries": [
@@ -40,6 +41,10 @@ MOCK_RSS_FEED_DATA = {
 class TestETLIntegration(unittest.TestCase):
 
     def setUp(self) -> None:
+        # Load the environment variables
+        load_environment()
+
+        # Create a new instance of the database interface
         self.db_interface = PostgresDBInterface()
         # Truncate the tables in the database (SupabaseDBInterface)
         tables = ['Revisions', 'Bills', 'Revision_Text', 'Summaries']

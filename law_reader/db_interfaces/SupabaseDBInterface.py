@@ -2,7 +2,6 @@ import os
 
 from postgrest.types import CountMethod
 from supabase import Client, create_client
-from dotenv import load_dotenv
 
 from law_reader import BillIdentifier, Revision
 from law_reader.common.RevisionSummaryInfo import RevisionSummaryInfo
@@ -19,7 +18,6 @@ class SupabaseDBInterface(DBInterface):
         super().__init__()
         # if debug flag is set, pull data from .env file
         # In production, the environment variables will be set in the github actions workflow
-        load_dotenv()  # Load environment variables from .env file
         sb_api_url = os.environ.get("SUPABASE_API_URL")  # github actions secret management
         sb_api_key = os.environ.get("SUPABASE_API_KEY")  # github actions secret management
 
