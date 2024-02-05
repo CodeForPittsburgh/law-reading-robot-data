@@ -1,3 +1,4 @@
+import os
 
 
 def load_environment(env_type: str = "") -> None:
@@ -12,4 +13,7 @@ def load_environment(env_type: str = "") -> None:
         load_dotenv()
     else:
         env_file = f".env.{env_type}"
+        # Check if file exists in working directory
+        if not os.path.exists(env_file):
+            raise FileNotFoundError(f"The file {env_file} does not exist in the working directory ({os.getcwd()}).")
         load_dotenv(dotenv_path=env_file)
